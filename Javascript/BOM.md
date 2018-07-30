@@ -17,7 +17,7 @@
   - window.innerWidth    获取浏览器的宽度
   - window.innerHeight  获取浏览器的高度
   - document.documentElement.clientWidth  获取浏览器的宽度
-  - document.documentElement.clientHieght  获取浏览器的高度
+  - document.documentElement.clientHeight  获取浏览器的高度
 
 - 浏览器左上角距屏幕左上角的偏移量
   - window.screenTop    垂直偏移量

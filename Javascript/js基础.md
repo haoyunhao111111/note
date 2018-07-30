@@ -1,5 +1,3 @@
-
-
 ## 一、组成：
 
 - ECMAscript
@@ -439,14 +437,6 @@ for(var i in arr){
 }
 ```
 
-### 数组的方法：
-
-- push()    向数组的后面插入一个元素
-
-```js
-arr.push(1);
-```
-
 ### 二维数组：
 
 #### 访问：`arr[i][j]`
@@ -637,6 +627,19 @@ functionName()
 - 强制类型转化
 - 隐式数据类型转换：算术运算符  逻辑运算符  条件if()  while()
 
+### 箭头函数：
+
+```js
+let aa=(item)=>{
+    console.log(123)
+    console.log(456)
+    console.log(item,"item")
+}
+aa(小白)
+```
+
+
+
 ## 十四、对象：
 
 ### 概念：
@@ -711,3 +714,234 @@ for(let i in apple){
 ### instanceof:
 
 `对象 instanceof 构造函数` 判断函数是否是对象的构造函数，是返回true,否返回false   
+
+
+
+## 十五、字符串方法:
+
+### 查找对应字符以及字符编码
+
+```js
+ let str =new string("山西农业大学")
+    str.chatAt(0)      //访问字符串中第几个的元素
+    str.charCodeAt(b)     //第几个元素的编码
+    string.fromCharCodeAt()   //类上的方法   括号里填字符编码
+```
+
+### 查找下标
+
+```js
+	str.indexOf()     //从前往后查找对应字符的下标。如果有返回下标，如果没有返回-1
+    str.lastIndexOf()  //从后往前查找对应字符的下标。如果有返回下标，如果没有返回-1
+    str.search()   //查找对应字符的下标。如果有返回下标，如果没有返回-1   可以使用正则·
+    str.match()   //返回一个数组，  所查的字   下标    所在数组      如果没有返回null
+```
+
+### 字符串的截取
+
+```js
+    str.substr("star,[length]")     //从star开始截取，长度为length
+    str.substring("star,end")     //从star开始截取，到end结束，不会截取到end
+    str.slice(star,end)   //从star开始截取，到end结束，不会截取到end
+```
+
+### 字符串大小写转换
+
+```js
+ let str1="ancEfGh"
+ str1.toLowerCase()   //转化为小写
+ str1.toUpperCase()   //转化为大写
+```
+
+### 字符串的替换
+
+```js
+let str="山西";
+str.replace("山"，"陕")
+```
+
+### 字符串转化为数组
+
+```js
+let str="1,2,3,4,5"
+arr=str.split(",")
+```
+
+## 十六、数组的方法：
+
+### 增加删除：
+
+```js
+let arr=[1,2,3,4,5]
+arr.push()     //在数组最后插入内容
+arr.pop()      //删除数组最后一位
+arr.unshift()  //在数组之前插入
+arr.shift()    //在数组之前删除一位
+arr.splice(3,4,"gour")  //在下标为3的位置删除，删除长度为4，在删除的位置添加gour
+arr.includes(5)  //判断是否包含某个数
+```
+
+### 截取：
+
+```js
+arr.slice(star,end)
+```
+
+### 连接多个数组：
+
+```js
+newarr=arr.concat()
+```
+
+### 取反：
+
+```js
+arr.reverse()
+```
+
+### 数组转化为字符串：
+
+```js
+arr.join("-")
+```
+
+### 排序：
+
+```js
+let arr=[1,2,3,0,4,5,6,7,9,8,4];
+arr.sort((x,y)=>y-x)
+console.log(arr)
+```
+
+### 查找
+
+> 返回第一个满足条件的元素
+
+```js
+ let arr=[1,2,3,0,4,5,6,7,9,8,4];
+ let num=arr.find(item=>item%2==0)
+ console.log(num)
+```
+
+### arr.some()
+
+> 判断是否满足条件(有就可以),返回值为boolean
+
+```js
+ let bb=arr.some(item=>item>10);
+ console.log(bb)
+```
+
+### arr.every()
+
+> 判断每个元素是否满足某种条件,返回值为boolean
+
+```js
+let cc=arr.every(item=>item>6);
+console.log(cc)
+```
+
+### arr.filter()
+
+> 筛选或过滤
+
+```js
+ let dd=arr.filter(item=>item>6);
+ console.log(dd)
+```
+
+### arr.forEach()
+
+> 让数组中每一个元素都执行一个函数，不会影响原数组
+
+### arr.map()
+
+> 让数组中每一个元素都执行一个函数，	返回一个新数组
+
+## 十七、节点：
+
+### 节点的分类
+
+- 文档节点
+- 元素节点
+- 属性节点
+- 文本节点
+- 注释节点
+
+|          | nodeName     | nodeValue | nodeType |
+| -------- | ------------ | --------- | -------- |
+| 文档节点 | #document    | null      | 9        |
+| 元素节点 | 大写的标签名 | null      | 1        |
+| 属性节点 | 大写的属性名 | 属性值    | 2        |
+| 文本节点 | #text        | 文本      | 3        |
+| 注释节点 | comment      | 注释内容  | 8        |
+
+### 节点的获取属性：
+
+>  childNodes     子节点
+>
+> parentNodes   父节点
+>
+> previousSibling   上一个兄弟节点
+>
+> nextSiblling         下一个兄弟节点
+>
+> previousElementSibling    上一个兄弟元素节点
+>
+> nextElementSibling    下一个兄弟元素节点
+
+### 节点的方法：
+
+#### 创建节点
+
+```js
+let div =document.createElement("div")
+```
+
+```js
+//创建文本节点
+let text1=document.createTextNode)("这是span标签")
+span.appendChild(text1)
+```
+
+```js
+//创建注释节点
+let comment1=document.createComment("这是注释节点")
+box.appendChild(comment1)
+```
+
+#### 插入节点
+
+```js
+//在最后插入节点
+let box=documnet.querySelxector(".box")
+box.appendChild("div")
+```
+
+```js
+//在之前插入节点  inserBefore(要插入的元素，插入位置之后的元素)
+let sapn=document.createElement("span")
+box.inserBofore(span,div)
+```
+
+#### 属性节点
+
+```js
+//创建属性节点
+let attr=document.createAttribute("id")
+attr.nodeValue="box"
+//设置属性节点
+box.setAttributeNode(attr)
+```
+
+#### 删除节点：
+
+```js
+//删除标签节点
+box.removeChild)("div")
+//删除属性节点
+box.removeAttribute("id")
+```
+
+
+
