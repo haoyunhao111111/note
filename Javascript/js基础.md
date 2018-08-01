@@ -1,3 +1,5 @@
+
+
 ## 一、组成：
 
 - ECMAscript
@@ -900,7 +902,7 @@ let div =document.createElement("div")
 
 ```js
 //创建文本节点
-let text1=document.createTextNode)("这是span标签")
+let text1=document.createTextNode("这是span标签")
 span.appendChild(text1)
 ```
 
@@ -914,7 +916,7 @@ box.appendChild(comment1)
 
 ```js
 //在最后插入节点
-let box=documnet.querySelxector(".box")
+let box=document.querySelector(".box")
 box.appendChild("div")
 ```
 
@@ -943,5 +945,68 @@ box.removeChild)("div")
 box.removeAttribute("id")
 ```
 
+## 十八、事件
+
+### 事件添加方式：
+
+- 节点：onclick=function()
+- 节点.addElementListener("事件"，事件处理程序，事件类型)
+
+### 事件构成：
+
+事件源：谁去触发事件，谁就是事件源；
+
+事件：用来保存事件触发时的信息
+
+事件处理程序:
+
+事件对象：用来保存事件触发时的信息
+
+>  w3c：事件处理程序的形参中
+
+>  ie：window.event
+
+```js
+//解决兼容问题
+box.onmouseenter=function(e){
+    let event=e || window.event
+}
+```
 
 
+
+### 常用事件:
+
+#### web端：
+
+##### 鼠标事件：
+
+- onclick                              单击
+- ondblclick                         双击
+- onmousedown                按下
+- onmouseup                      抬起
+- onmousemove                鼠标移动
+- onmouseover                   移入
+- onmouseout                     移出
+- onmouseenter                  移入
+- onmouseleave                   移出  
+
+###### 鼠标事件对象常用的属性：
+
+clientX:距离浏览器的X偏移
+
+clientY:距离浏览器的Y偏移
+
+offsetX:距离事件源的X偏移
+
+offsetY：距离事件源的Y偏移
+
+screenX:距离屏幕的X偏移
+
+screenY:距离屏幕的Y偏移
+
+#### 移动端事件：
+
+- ontouchstart     按下
+- ontouchmove   移动
+- ontouchend      抬起

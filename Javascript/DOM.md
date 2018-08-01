@@ -11,7 +11,7 @@ let box=document.getElementById("idname")    box:变量名     idname:ID名
 - 获取类名的元素  集合
 
 ```js
-let obj=document.get.ElementByClassName("classname");
+let obj=document.getElementByClassName("classname");
 ```
 
 - 获取标签名的元素   集合  下标   遍历
