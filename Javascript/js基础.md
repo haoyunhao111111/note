@@ -940,7 +940,7 @@ box.setAttributeNode(attr)
 
 ```js
 //删除标签节点
-box.removeChild)("div")
+box.removeChild("div")
 //删除属性节点
 box.removeAttribute("id")
 ```
@@ -950,13 +950,13 @@ box.removeAttribute("id")
 ### 事件添加方式：
 
 - 节点：onclick=function()
-- 节点.addElementListener("事件"，事件处理程序，事件类型)
+- 节点.addEventListener("事件"，事件处理程序，事件类型)
 
 ### 事件构成：
 
 事件源：谁去触发事件，谁就是事件源；
 
-事件：用来保存事件触发时的信息
+事件：
 
 事件处理程序:
 
@@ -984,14 +984,31 @@ box.onmouseenter=function(e){
 - onclick                              单击
 - ondblclick                         双击
 - onmousedown                按下
-- onmouseup                      抬起
+- onmouseup                     抬起
 - onmousemove                鼠标移动
-- onmouseover                   移入
-- onmouseout                     移出
-- onmouseenter                  移入
-- onmouseleave                   移出  
+- onmouseover                  移入
+- onmouseout                    移出
+- onmouseenter                 移入
+- onmouseleave                 移出  
+- oncontextmenu               右击
 
-###### 鼠标事件对象常用的属性：
+```js
+document.oncontextmenu=function(e){
+    e.preventDefault();        //阻止浏览器默认行为
+}
+```
+
+##### 鼠标滚轮事件：onmousewheel
+
+```js
+box.onmousewheel=function(){
+    console.log(123)
+}
+```
+
+
+
+##### 鼠标事件对象常用的属性：
 
 clientX:距离浏览器的X偏移
 
@@ -1005,8 +1022,121 @@ screenX:距离屏幕的X偏移
 
 screenY:距离屏幕的Y偏移
 
+##### 键盘事件：
+
+onkeydown    键盘按下
+
+onkeyup         键盘抬起
+
+onkeypress    键盘按下（按下功能键ctrl  shift delete esc等不会触发）
+
+##### 键盘事件对象常用属性：
+
+keyCode:   键盘码
+
+ctrlKey    是否按下crtl
+
+shiftKey   是否按下shift
+
+altKey    是否按下alt
+
+key         键盘名
+
+##### 表单事件：
+
+oninput   输入
+
+onchange     内容发生改变，并且失去焦点
+
+onblur       失去焦点
+
+onfocus     获得焦点
+
+onsubmit     提交表单
+
+onselect      文本选中
+
+##### 窗口事件：
+
+##### 事件流：
+
+当触发一个事件时，由这个事件的容器到整个文档都会按照特定的顺序进行依次触发；
+
+##### 事件的分类：
+
+捕获型事件：true    从不具体的事件源到具体的事件源
+
+冒泡型事件：false   从具体的事件源到不具体的事件源；
+
+##### 阻止事件流：
+
+event.stopPropagation()
+
+```js
+//解决兼容问题
+let event=event || window.event
+event.stopPropagation();  //w3c
+event.returnValue=true;   //IE
+```
+
+##### 事件委派：
+
+```js
+event.target     //目标事件源
+```
+
+
+
 #### 移动端事件：
 
 - ontouchstart     按下
 - ontouchmove   移动
 - ontouchend      抬起
+
+## 十九、日期对象
+
+### 获取当前时间
+
+```js
+let ay=new Date("2018/8/8 12:00:00")
+let ay1=new Date("12:00:00 2018/8/8")
+let ay=new Date("2018/8/8")  //月份从0开始   0-11
+```
+
+### 设置时间
+
+```js
+//获取格林尼治时间
+let now=new Date()
+now.setFullYear(2020)  //设置年份
+now.setMonth(5)  //设置月份
+now.setDate(26)  //设置日期
+now.setlHours()  //设置小时
+now.setMinutes()  //设置分钟
+now.setSeconds()  //设置秒数
+now.setMillliseconds()  //设置毫秒
+//获取世界协调时
+let now=new Date()
+now.setUTCFullYear(2020)  //设置年份
+now.setUTCMonth(5)  //设置月份
+now.setUTCDate(26)  //设置日期
+now.setUTCHours()  //设置小时
+now.setUTCMinutes()  //设置分钟
+now.setUTCSeconds()  //设置秒数
+now.SetUTCMillliseconds()  //设置毫秒
+```
+
+### 获取时间
+
+```js
+let now=new Date()
+now.getFullYear()  //获取当前年份
+now.getMonth()  //获取当前月份
+now.getDate()  //获取当前年份
+now.getlHours()  //设置小时
+now.getMinutes()  //设置分钟
+now.getSeconds()  //设置秒数
+now.getMillliseconds()  //设置毫秒
+now.getTime()    //当前时间到1970年1月1日00:00
+```
+
