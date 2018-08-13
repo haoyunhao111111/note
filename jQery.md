@@ -44,9 +44,9 @@ $(".box").css({
 - .eq(index)   返回对应下标的jQuery对象
 - .get(index)   返回对应下标的DOM对象
 - .hasClass("类名")   判断jQuery数组中是否有一个类名为***对象；  返回值为bool
-- filter([选择器]，[元素]，[函数])   筛选出符合条件的对象
-- is("选择器)   判断是否为某个对象、
-- map(fn)  生成一个新的数组或集合
+- .filter([选择器]，[元素]，[函数])   筛选出符合条件的对象
+- .is("选择器)   判断是否为某个对象,
+- .map(fn)  生成一个新的数组或集合
 - .has("选择器“)   返回一个选中的jquery对象、
 - .not("选择器")   从jQuery 数组中删除选中的元素。
 - .slice(start,[end])  截取指定位置的jquery对象
@@ -66,3 +66,40 @@ $(".box").css({
 - addClass()    增加类名
 - removeClass()   移出类名
 - toggleClass()    切换类名
+
+#### 操作内容的方法：
+
+- .text()
+- .html()
+- .val()       表单
+
+#### jQuery对象元素的位置信息
+
+- .offset()     返回一个位置信息的对象 {left:**,top:**}  相对于浏览器的位置
+- .position()     返回一个位置信息的对象 {left:**,top:**}  相对于定位的祖先元素的位置
+- .scrollTop()     滚动条的高度
+- .scrollLeft()
+
+#### 常用方法：
+
+- findIndex:获取第一个符合条件的下标
+- toArray():将jQuery对象转化为原生数组对象
+
+#### 事件对象：
+
+- e.offsetX
+- e.offsetY
+- e.pageX
+- e.pageY
+- e.target
+- e.currentTarget      ==this
+- e.stopPropagetion()
+- e.preventDefault()
+
+#### 事件源：
+
+- one()
+- on()
+- trigger()   自动触发事件
+- triggerHander    自动触发事件，并且清除浏览器默认行为
+
