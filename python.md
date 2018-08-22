@@ -44,7 +44,7 @@ print("str",end="str")
 - str.center(扩充后的长度，扩充的内容)   str在中间
 - str.ljust(扩充后的长度，扩充的内容)   str在左边
 - str.rjust(扩充后的长度，扩充的内容)   str在右边
-- string.count("str",start,end)  从start到end间str出现的次数
+- string.count("str",start,end)  从start到end间string3出现的次数
 - str.encode(encoding="utf-8",errors="ignore")   编码
 - str.decode(encoding="utf-8",errors="ignore")   解码
 - str.endswith()     是否是以某一字符结尾   返回值为bool
@@ -89,9 +89,9 @@ print("str",end="str")
 
 #### 内建函数：
 
-- arr.append(“a”)   在列表最后插入元素
+- list.append(“a”)   在列表最后插入元素
 
-- arr.insert(index,"a")  在任意位置插入元素,如果没有index默认最后插入
+- list.insert(index,"a")  在任意位置插入元素,如果找不到index默认最后插入
 - list.extend(list1)   将两个列表进行合并
 
 ```python
@@ -164,7 +164,7 @@ mydict[键]
 
 #### 删除字典和属性:
 
-del ,mydict["name"]
+del .mydict["name"]
 
 #### 内建函数：
 
@@ -241,7 +241,7 @@ copy.deepcopy(arr)  深拷贝
 
 #### 基本算数运算符
 
-> + - *  /    
+> + - * /
 
 ##### 注意：
 
@@ -275,11 +275,11 @@ copy.deepcopy(arr)  深拷贝
 - ^  按位异或：当两个对应的二进制相异时，结果为1
 - ~ 按位取反：对数据的每个二进制位取反，即1->0,0->1
 - <<  左移运算符：运算符的二进制位全部左移若干位,由<<右边的数字指定了移动的位数，高位丢弃，低位补0
-- .>>右移运算符：运算符的二进制位全部右移若干位,由>>右边的数字指定了移动的位数,高位丢弃，低位补0
+- .>>右移运算符： 运算符的二进制位全部右移若干位,由>>右边的数字指定了移动的位数,高位丢弃，低位补0
 
 ### 赋值运算符：
 
-> =  +=  -=  *=  /=  &=  **=  //=
+> =  +=  -=  *=  /=  %=  **=  //=
 
 ### 成员运算符
 
@@ -378,9 +378,9 @@ fn("xb",18,tel=12345678,sex="男")
 #### 匿名函数：
 
 ```python
-lambda 参数:表达式(只能写一行)
+lambda 参数:表达式
 参数可以有多个；
-表达式不需要return,自动return;
+表达式不需要return,自动return;只能写一行
 num=(lambda a,b:a+b)(1,2)       ##自调用
 print(num)
 fn=lambda a,b:a+b               ##字面量
@@ -477,6 +477,169 @@ def cc(a):
     def dd(b):
         print(a+b)
     return dd
-cc(4)(5)hanshudehanshuhanshudekellliluhua
+cc(4)(5)
 ```
 
+### 文件操作
+
+#### 读文件：
+
+```python
+f=open("filename",mode)
+# filaname:文件路径
+# mode:操作方式；
+```
+
+
+
+#### 打开模式：
+
+- r  读操作（默认）
+  - read     读取文件
+  - read([num])     num代表读取的字符数量，默认为全部；
+  - readline()          读取行
+  - readline([num])    文件读取每一行,num代表读取本行的字符数量
+  - readlines         列表形式的多行，返回值为列表
+- rb  以二进制的方式读取文件
+- w   写入     会覆盖之前的内容；路径不对会创建新文件
+  - write(str)   把str写入文件，在str后不会加换行符；
+  - f.flush()     把缓冲区的内容写入硬盘
+- a    写入     不会覆盖之前的内容；路径不对会创建新文件
+- r+    读写（不会创建新文件，每次读写文件在文件开头）
+- w+   读写（创建新文件，会覆盖原内容）
+- a+    读写（创建新文件，每次读写追加）
+
+#### 指针：
+
+seek():移动文件读取指针到指定位置
+
+```python
+f.seek(p,0)  移动到文件第p个字节处，绝对位置
+f.seek(p,1)  移动到相对于当前位置之后的p个字节，文件以二进制的方式打开
+f.seek(p,2)  移动到相对文章尾之后的p个字节，文件以二进制的方式打开
+```
+
+tell()：返回文件读取指针的位置
+
+#### 捕获异常：
+
+```python
+try:
+    f=open("note.txt","r")
+except:
+    print("发生错误")
+    
+    
+    
+try:
+    f=open("note.txt","r")
+finally:                    #不管会不会出错，都会执行下面的内容；
+    if f:                   #如果f存在
+        f.close()
+```
+
+```python
+#python3语法糖
+with open("note1.txt","r") as f:        #自动关闭文件
+```
+
+
+
+### os模块：
+
+os 可以操作文件、系统
+
+os.path     操作文件路径
+
+os.system()     命令控制台
+
+os.listdir()   显示目录下的内容
+
+os.mkdir()   创建文件夹
+
+os.path.isfile()       是否为文件
+
+os.path.isdir()        是否为路径
+
+
+
+### pickle模块常用方法
+
+```python
+#写入数据
+import pickle
+obj=[{"name":"xb","sex":"男","tel":12345678}]
+with:open("node.txt","wb") as f:
+          pickle.dump(obj,f)
+#读数据
+import pickle
+with open("node.txt","rb") as f:
+    obj=pickle.load(f)
+    print(obj[0]["name"])         
+```
+
+
+
+### csv存储数据：
+
+> 电子表格和数据库常用的导入导出格式
+
+```python
+import csv
+#列表写入数据
+with open("dome.csv","w",newline="") as f:
+    writer=csv.writer(f,dialect="excel")
+    for i in range(10):
+        writer.writerows([[1,2,3,4,5],["a","b","c","d","e"]])
+#字典写入数据
+with open("dome.csv","w",newline="") as c:
+    writer=csv.DictWriter(c,[1,2,3,4,5])
+    writer.writeheader()
+    writer.writerow({1:"a",2:"b",3:"c",4:"d",5:"e"})
+    writer.writerows([{1:"a",2:"b",3:"c",4:"d",5:"e"},{1:"a",2:"b",3:"c",4:"d",5:"e"}])
+#列表方式读数据
+with open("dome.csv","r") as d:
+    reader=csv.reader(d)
+    for item in reader:
+        print(item)
+ #字典方式读数据
+with open("dome.csv","r") as b:
+    read=csv.DictReader(b)
+    for i in read:
+        print(dict(i))
+
+```
+
+### 面向对象：
+
+静态方法和类方法都可以通过类或者实例来调用，其两个的特点都是不能够调用实例属性
+
+类属性与类方法是类固有的方法与属性，不会因为实例不同而改变
+
+### 继承和派生：
+
+继承的目的是延续旧的类的功能
+
+继承：任何类都是直接或者间接继承object类，objects是一切基类父类
+
+派生：派生就是子类在继承父类的基础上衍生出新的属性，子类独有的，父类没有的，或者子类定义与父类同名的东西，子类也叫派生类
+
+派生的目的是在旧类的基础上派生新功能
+
+
+
+#### 继承和派生常用的内建函数：
+
+- issubclass(sub,parent)   判断sub是否为parent的子类  返回bool
+- isinstance(ins,class)   判断ins是否为class的实例      返回bool
+- hasattr(obj,"attr")     判断obj中是否有attr属性    返回bool
+-  getattr(obj,"attr")     获取obj中的attr属性
+- setattr(obj,"attr")     设置obj中的attr属性
+- delattr(obj,"attr")     删除obj中的attr属性
+- dir()   以列表的形式列出类或·实例的属性和方法
+- super()  寻找父类信息super(type[,object-or-type])
+
+​              python3和python2的一个区别就是python3可以直接使用
+
+- super().***    代替super(Class,self).***
+- vars(object)    以字典的形式返回类或实例的属性
