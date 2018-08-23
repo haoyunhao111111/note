@@ -636,10 +636,205 @@ with open("dome.csv","r") as b:
 -  getattr(obj,"attr")     获取obj中的attr属性
 - setattr(obj,"attr")     设置obj中的attr属性
 - delattr(obj,"attr")     删除obj中的attr属性
-- dir()   以列表的形式列出类或·实例的属性和方法
+- dir()   以列表的形式列出类或实例的属性和方法
 - super()  寻找父类信息super(type[,object-or-type])
 
 ​              python3和python2的一个区别就是python3可以直接使用
 
 - super().***    代替super(Class,self).***
 - vars(object)    以字典的形式返回类或实例的属性
+
+#### 封装：
+
+> 对内部数据进行保护（隐藏），或合理的暴露
+
+  
+
+### 异常
+
+> 因为程序出现了错误而在正常控制流以外采取的行为
+
+#### 错误
+
+- 软件方面（错误是语法或者逻辑上的）
+
+语法错误：软件结构上的错误，导致不能被解释器解释或者编译器无法编译，这些错误必须在程序执行前纠正
+
+逻辑错误：不完整或者不合法得输入导致，也可能是逻辑无法生成，计算，或者输出结果需要的过程无法执行
+
+#### except捕获多个异常
+
+当捕获多个异常时，可以把要捕获异常的名字，放到except后，并使用元组的方式进行存储
+
+```python
+try:
+    print("----test1-----")
+    open("123.txt","r")  #如果123.txt不存在，那么会产生IOError异常
+    print("----test1-----")
+    print(num)     #如果num没有定义，那么会产生NameError异常
+except(IOError,NameError):
+    #如果想通过一次except捕获到多个异常可以用一个元组的方式
+    #errorMsg里会保存捕获到的错误信息
+```
+
+#### 总结
+
+- except语句不是必须的，finally语句也不是必须的，但是二者必须要有一个，否则就没有try的意义
+- except语句可以有多个，python会按照except语句的顺序依次匹配你指定的异常，如果异常已经处理就不会进入后面的except语句
+- except语句可以以元组的形式同时指定多个异常
+- except语句后面如果不指定异常类型，则默认捕获所有异常，你可以通过logging或sys模块获取当前异常
+- 如果要捕获异常后重复抛出，请使用raise,后面不要任何参数或信息
+- 不建议捕获并抛出同一个异常
+
+#### 异常种类
+
+```python
+BaseException
+ +-- SystemExit  解释器请求退出
+ +-- KeyboardInterrupt  用户中断执行（ctr + c）
+ +-- GeneratorExit   生成器发生异常来通知退出
+ +-- Exception   常规错误基类
+      +-- StopIteration 	迭代器没有更多的值
+      +-- StopAsyncIteration
+      +-- ArithmeticError   数值计算错误基类
+      |    +-- FloatingPointError   浮点计算错误
+      |    +-- OverflowError    数值运算超出最大限制
+      |    +-- ZeroDivisionError    除(或取模)零 (所有数据类型)
+      +-- AssertionError    断言语句失败
+      +-- AttributeError    对象没有这个属性
+      +-- BufferError   
+      +-- EOFError  没有内建输入，到达EOF标记
+      +-- ImportError   导入模块失败
+      |    +-- ModuleNotFoundError
+      +-- LookupError   无效数据查询基类
+      |    +-- IndexError 序列中没有此索引(index)
+      |    +-- KeyError 映射中没有这个键
+      +-- MemoryError   内存溢出错误
+      +-- NameError 未声明未初始化的本地变量
+      |    +-- UnboundLocalError 	访问未初始化的本地变量
+      +-- OSError   操作系统错误
+      |    +-- BlockingIOError 操作阻塞设置为非阻塞操作的对象（例如套接字）时引发
+      |    +-- ChildProcessError 子进程上的操作失败时引发
+      |    +-- ConnectionError 连接相关的问题的基类
+      |    |    +-- BrokenPipeError
+      |    |    +-- ConnectionAbortedError
+      |    |    +-- ConnectionRefusedError
+      |    |    +-- ConnectionResetError
+      |    +-- FileExistsError 尝试创建已存在的文件或目录时引发
+      |    +-- FileNotFoundError    在请求文件或目录但不存在时引发
+      |    +-- InterruptedError 系统调用被输入信号中断时触发
+      |    +-- IsADirectoryError 在目录上请求文件操作时引发
+      |    +-- NotADirectoryError 在对非目录的os.listdir()事物请求目录操作（例如）时引发
+      |    +-- PermissionError 尝试在没有足够访问权限的情况下运行操作时引发 - 例如文件系统权限。
+      |    +-- ProcessLookupError 当给定进程不存在时引发
+      |    +-- TimeoutError 系统功能在系统级别超时时触发。
+      +-- ReferenceError    弱引用(Weak reference)试图访问已经垃圾回收了的对象
+      +-- RuntimeError  一般的运行时错误
+      |    +-- NotImplementedError  	尚未实现的方法
+      |    +-- RecursionError
+      +-- SyntaxError 一般的解释器系统错误
+      |    +-- IndentationError 缩进错误
+      |         +-- TabError    Tab 和空格混用
+      +-- SystemError Python 语法错误
+      +-- TypeError     对类型无效的操作
+      +-- ValueError    传入无效的参数
+      |    +-- UnicodeError  Unicode 相关的错误
+      |         +-- UnicodeDecodeError  	Unicode 解码时的错误
+      |         +-- UnicodeEncodeError  Unicode 编码时错误
+      |         +-- UnicodeTranslateError   Unicode 转换时错误
+      +-- Warning   警告的基类
+           +-- DeprecationWarning   关于被弃用的特征的警告
+           +-- PendingDeprecationWarning    关于特性将会被废弃的警告
+           +-- RuntimeWarning   可疑的运行时行为(runtime behavior)的警告
+           +-- SyntaxWarning    可疑的语法的警告    
+           +-- UserWarning  用户代码生成的警告
+           +-- FutureWarning    关于构造将来语义会有改变的警告
+           +-- ImportWarning
+           +-- UnicodeWarning
+           +-- BytesWarning
+           +-- ResourceWarning
+```
+
+### 模块和包
+
+#### 包
+
+> 文件夹(里面必须有初始化)
+
+##### 引入方法
+
+单个引入
+
+```python
+#第一种引入方式
+import bao.a
+bao.a.aa()
+#第二种引入方式
+from bao import a
+a.aa1()
+#第三种引入方式
+from bao import a as a1
+a1.aa2()
+#第四种引入方式
+from bao.a import aa3
+aa3()
+```
+
+一次性导入
+
+```python
+from bao.a import *         #一般不用
+在包中子模块添加变量__all__   列表
+```
+
+#### 使用相对路径导入包中子模块
+
+- .  当前目录
+- ..上一级目录
+
+##### 注意:
+
+- 使用.这种模式从不是包的目录中导入将会引发错误
+- 在顶层的脚本的简单模块中，他们将不起作用
+- 包的部分将作为脚本直接执行，那他们将不起作用
+
+#### 重新加载模块
+
+```python
+import imp
+import spam
+imp.reload(spam)
+```
+
+#### 运行目录或压缩文件
+
+> 应用程序中有多个文件，可以把应用程序放进自己的目录并添加一个__main__.py文件
+
+```python
+myapplianction/
+spam.py
+bar.py
+__main__.py
+```
+
+#### 读取位于包中的数据文件
+
+```python
+import pkgutil
+data=pkgutil.get_data(__package__,"somedata.dat")   #结果为字节型数据
+```
+
+#### 通过字符串名导入模块
+
+```python
+import importlib
+math=importlib.import_module('math')
+math.sin(2)
+mod=importlib.import_module("urllib.request")
+u=mod.urllopen('http:www.pyhton.org')
+```
+
+
+
+
+
