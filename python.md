@@ -438,7 +438,7 @@ print(x(2))
 
 global  告诉python准备生成一个或多个全局变量名    先声明后使用，不能声明的同时使用
 
-nonlocal   
+nonlocal   修改上一级的变量
 
 ### 装饰器
 
@@ -611,6 +611,12 @@ with open("dome.csv","r") as b:
 ```
 
 ### 面向对象：
+
+#### 类的组成
+
+- 静态特征
+- 动态特征：在类的内部，使用def关键字来定义一个方法，与一般函数定义不同，类方法必须包含参数self，且为第一个参数，self代表的是类的实例
+- 构造函数：目的不是创建对象（开辟内存），是为了初始化对象
 
 静态方法和类方法都可以通过类或者实例来调用，其两个的特点都是不能够调用实例属性
 
@@ -794,7 +800,7 @@ from bao.a import *         #一般不用
 
 ##### 注意:
 
-- 使用.这种模式从不是包的目录中导入将会引发错误
+- 使用这种模式从不是包的目录中导入将会引发错误
 - 在顶层的脚本的简单模块中，他们将不起作用
 - 包的部分将作为脚本直接执行，那他们将不起作用
 
@@ -834,7 +840,134 @@ mod=importlib.import_module("urllib.request")
 u=mod.urllopen('http:www.pyhton.org')
 ```
 
+### GUI
 
+#### Tkinter编程步骤：
+
+1. 导入tkinter模块
+2. 创建一个顶层对象，容纳整个GUI应用
+3. 在顶层窗口之上构建所有GUI组件
+4. 通过底层的应用代码将这些GUI组件连接
+5. 进入主事件循环
+
+##### 模块
+
+- 导入并设置tkinter
+
+```python
+import tkinter as tk
+window = tk.Tk()    #创建窗口
+window.title("我的窗口")  #设置窗口标题
+window.geometry('400x200')   #设置窗口尺寸
+window.resizable(0,0)   #重置尺寸的大小
+```
+
+- Label控件
+
+```python
+l1=tk.Label(window)    #实例化  Label  第一个餐数是主窗口 
+# l1['text']="这是Hello Word"        #文本
+l1['font']=("",20,"bold italic")    #字体  font=(字的样式，字号，加粗/倾斜)
+l1['bg']="#ff6700"    #背景色  
+l1['fg']="#ccc"       #前景色   用来设置字体颜色
+l1['width']=20
+l1['height']=2
+l1['anchor']='n'         #设置文字的位置 n：北，s:南，e:东，w:西   ne nw  se  sw  c 
+```
+
+- PhotoImage控件
+
+```python
+img1=tk.PhotoImage(file="1.png")  #只能识别png和gif文件，把jpg后缀名改成Png也不可以
+l2=tk.Label(window)    
+l2['image']=img1  
+l2.pack()
+```
+
+- Entry控件
+
+```python
+e=tk.Entry(window)
+e['selectbackground']="red"     #选中文字的背景色
+e['selectforeground']="blue"     #选中的文字的颜色
+e['show']=""        #设置文本框字以什么形式显示
+
+
+e=tk.Entry(window,textvariable=v1,validate="key",validatecommand=fn1,invalidcommand=fn2)
+#valiable     focus失去和获得焦点       focusin获得焦点     focusout  失去焦点    key每输入一个字符，执行一次
+```
+
+- Text控件
+
+```python
+t=tk.Text(window)
+t.insert('end',val)   #从后面插入
+t.insert('insert',val)   #选到哪插到哪
+```
+
+- Button控件
+
+```python
+b1=tk.Button(window,text="点击",width="20",height="2",bg="#333",fg="#fff",command=aa)
+b1.pack()
+```
+
+- Radiobutton
+
+```python
+v1=tk.Variable()
+r=tk.Radiobutton(window,text="A",variable=v1)
+r1=tk.Radiobutton(window,text="B",variable=v1)
+r2=tk.Radiobutton(window,text="C",variable=v1)
+r.pack()
+r1.pack()
+r2.pack()
+```
+
+- Checkbutton
+- ListBox
+
+```python
+import tkinter as qw
+window=qw.Tk()
+window.title("我的")
+window.geometry('600x400')
+
+
+en=qw.Entry(window)
+en.pack()
+
+
+def fn():
+    con=en.get()
+    arr=lx1.curselection()
+    if len(con)==0:
+        return
+    if len(arr)==0:
+        lx1.insert('end',con)
+    elif len(arr)==1:
+        lx1.insert(arr[0]+1,con)
+    else:
+        num=1
+        for i in arr:
+            lx1.insert(arr[i]+num,con)
+            num+=1
+
+
+
+
+b=qw.Button(window,text="插入",command=fn)
+b.pack()
+lx1=qw.Listbox(window,selectmode="extended")
+for item in ['北京','上海','汾阳','广州']:
+    lx1.insert('end',item)
+lx1.pack()
+
+
+
+window.mainloop()
+
+```
 
 
 
