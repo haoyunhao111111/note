@@ -622,6 +622,31 @@ with open("dome.csv","r") as b:
 
 类属性与类方法是类固有的方法与属性，不会因为实例不同而改变
 
+```python
+class Student:
+    
+    #方法 不是函数了 构造器
+    def __init__(self,name,age):
+    	self.name = name
+    	self.age = age
+
+
+    def print_info(self):
+    	print(self.name)
+    	print(self.age)
+
+
+stu1 = Student('zs',20)
+stu1.print_info()
+print(stu1)
+
+stu2 = Student('ls',24)
+stu2.print_info()
+print(stu2)
+```
+
+![](C:\Users\hyh\Desktop\note\内存分析.png)
+
 ### 继承和派生：
 
 继承的目的是延续旧的类的功能
@@ -631,6 +656,39 @@ with open("dome.csv","r") as b:
 派生：派生就是子类在继承父类的基础上衍生出新的属性，子类独有的，父类没有的，或者子类定义与父类同名的东西，子类也叫派生类
 
 派生的目的是在旧类的基础上派生新功能
+
+```python
+##################################
+# 面向对象三大特征：封装、继承、多态
+# 继承：合理隐藏、合理暴露
+# 实现: （） class Cat(Animal):
+# 误区: 继承的目的是为了复用?不是! 是确实存在is a 的关系!!!
+##################################
+
+
+class Animal:
+
+	def __init__(self , name):
+		self.name = name
+
+	def cry(self):
+		print('动物都会吼叫!')
+
+a = Animal('animal')
+a.cry()
+
+class Cat(Animal):	
+	pass
+
+	#方法重写 子类可以重写父类的方法 做一些改进
+	def cry(self):
+		print('喵喵!')
+
+
+c = Cat('cat')
+c.cry()
+print(c.name)
+```
 
 
 
@@ -654,7 +712,34 @@ with open("dome.csv","r") as b:
 
 > 对内部数据进行保护（隐藏），或合理的暴露
 
-  
+  ```python
+class Person:
+    #pass
+    def __init__(self , name , age):
+        self.name = name
+        self.__age = age
+
+
+    def set_age(self , age):
+    	if age > 0 and age < 150:
+    		self.__age = age
+    	else:
+    		print('年龄%d不合法'%age)
+
+    def get_age(self):
+    	return self.__age
+    def print_info(self):
+    	return self.name + "-----" + str(self.age)
+
+p1 = Person('zs' , 20)
+print(p1.name)
+#p1.age = 200
+#print(p1.age)
+p1.set_age(300)
+print(p1.get_age())
+  ```
+
+
 
 ### 异常
 
@@ -850,7 +935,7 @@ u=mod.urllopen('http:www.pyhton.org')
 4. 通过底层的应用代码将这些GUI组件连接
 5. 进入主事件循环
 
-##### 模块
+##### 控件
 
 - 导入并设置tkinter
 
@@ -887,7 +972,7 @@ l2.pack()
 - Entry控件
 
 ```python
-e=tk.Entry(window)
+e=tk.Entry(window)  #输入框
 e['selectbackground']="red"     #选中文字的背景色
 e['selectforeground']="blue"     #选中的文字的颜色
 e['show']=""        #设置文本框字以什么形式显示
@@ -900,7 +985,7 @@ e=tk.Entry(window,textvariable=v1,validate="key",validatecommand=fn1,invalidcomm
 - Text控件
 
 ```python
-t=tk.Text(window)
+t=tk.Text(window)  #文本域
 t.insert('end',val)   #从后面插入
 t.insert('insert',val)   #选到哪插到哪
 ```
@@ -908,14 +993,14 @@ t.insert('insert',val)   #选到哪插到哪
 - Button控件
 
 ```python
-b1=tk.Button(window,text="点击",width="20",height="2",bg="#333",fg="#fff",command=aa)
+b1=tk.Button(window,text="点击",width="20",height="2",bg="#333",fg="#fff",command=aa)  #按键
 b1.pack()
 ```
 
 - Radiobutton
 
 ```python
-v1=tk.Variable()
+v1=tk.Variable()  #单选按钮
 r=tk.Radiobutton(window,text="A",variable=v1)
 r1=tk.Radiobutton(window,text="B",variable=v1)
 r2=tk.Radiobutton(window,text="C",variable=v1)
@@ -924,7 +1009,7 @@ r1.pack()
 r2.pack()
 ```
 
-- Checkbutton
+- Checkbutton   多选按钮
 - ListBox
 
 ```python
@@ -958,7 +1043,7 @@ def fn():
 
 b=qw.Button(window,text="插入",command=fn)
 b.pack()
-lx1=qw.Listbox(window,selectmode="extended")
+lx1=qw.Listbox(window,selectmode="extended")   #列表
 for item in ['北京','上海','汾阳','广州']:
     lx1.insert('end',item)
 lx1.pack()
@@ -969,5 +1054,291 @@ window.mainloop()
 
 ```
 
+- scale     滑块
+
+```python
+import tkinter as qw
+window=qw.Tk()
+window.title("我的窗口")
+window.geometry('600x400')
+window.resizable(0,0)
+
+l1=qw.Label(window)
+l1.config({
+    'text':"this is label",
+    'fg':'#ff6700',
+    'bg':'#333',
+    'font':('',20,'italic bold'),
+})
+l1.pack()
+
+#scale  滑块
+
+s1=qw.Scale(window)
+
+#属性
+s1.config({
+    'orient':qw.HORIZONTAL,       #指定滑块方向为水平方向
+    'from_':50,      #指定滑块的起始数值
+    'to':200,
+    'length':300,   #滑块长度
+    'resolution':5,   #步进值
+    'digits':5,        #数字的位数
+    'tickinterval':50,   #间隔的刻度    最小值为步进值的1/2
+    'showvalue':1,          #bool   1  0    显示上方的值
+    'label':"温度",    #为滑块添加标签
+})
+
+#方法
+#   get    set
+# print(s1.get())  #获取值
+# s1.set(150)  #设置
+s1.pack()
 
 
+def fn1():
+    v1=int(s1.get())
+    l1['text']="当前温度为：%s℃"%v1
+b1=qw.Button(window,command=fn1)
+b1['text']="显示"
+b1.pack()
+
+
+window.mainloop()
+```
+
+- Spinbox
+
+```python
+sz=qw.Spinbox(window)
+sz.config({
+    'from_':50,     #设置起始值
+    'to':200,
+    'width':20,    #宽度
+    'values':('北京','上海','广州','桃园')
+    'value':50
+})
+```
+
+- Canvas
+
+```python
+canvas=qw.Canvas(window)
+canvas.config({
+    'width':300,
+    'height':300,
+    'bg':'#aaa'
+})
+canvas.pack()
+#画图片
+img1=qw.PhotoImage(file="1.png",width=100,height=100)
+cimg=canvas.create_image(0,0,image=img1)
+#画线
+cline=canvas.create_line(0,0,200,200,fill="red")
+#画扇形
+carc=canvas.create_arc(100,100,300,300,extent=240,start=90,fill="blue")
+#画圆
+coval=canvas.create_oval(200,200,350,350,fill="yellow")
+#文本
+ctext=canvas.create_text(50,50,text="Python",font=("",20))
+#多边形
+cp=canvas.create_polygon(0,0,0,100,100,100,fill="green")
+#正方形
+cz=canvas.create_rectangle(100,100,200,200,fill="pink")
+def fn3():
+    canvas.move(cz,20,30)
+b1=qw.Button(window,text="click",command=fn3)
+b1.pack()
+```
+
+- Menu
+
+```python
+# Menu  菜单栏
+menubar=qw.Menu(window)   #创建菜单
+
+
+#创建文件子菜单
+menu1=qw.Menu(menubar,tearoff=False)    #创建子菜单项
+menu1.add_command(label="新建文件")    #子菜单添加内容
+menu1.add_command(label="新建窗口")
+menu1.add_separator()  #设置分割线
+menu1.add_command(label="打开文件")
+menu1.add_command(label="打开文件夹")
+menu1.add_command(label="打开工作区")
+
+
+#创建二级子菜单
+menu1_1=qw.Menu(menu1,tearoff=False)
+menu1_1.add_command(label="重新打开已关闭的编辑器")
+menu1_1.add_separator()
+menu1_1.add_command(label="更多")
+menu1_1.add_separator()
+menu1_1.add_command(label="清除最近打开记录")
+menu1.add_cascade(menu=menu1_1,label="打开最近的文件")
+menu1.add_separator()  #设置分割线
+
+
+window.configure(menu=menubar)   #添加菜单栏
+
+#右键菜单
+mm=qw.Menu(window,tearoff=False)
+for item in ['css','html','javascript','python']:
+    mm.add_command(label=item)
+
+def click(e):
+    mm.post(e.x_root,e.y_root)
+
+window.bind('<Button-3>',click)
+```
+
+#### 布局
+
+#### 三种布局方式：
+
+pack()    相对布局，组件的大小和位置会随着窗口的大小而改变
+
+anchor   锚位置，当剩余空间远远大于所需空间
+
+side    对齐方式   "left"   qw.LEFT
+
+fill    填充  qw.X   qw.Y  qw.BOTH
+
+expand   扩充，展开 
+
+padx/pady   外间距
+ipadx/ipady   内间距
+
+```python
+import tkinter as qw
+window=qw.Tk()
+window.geometry('1000x400')
+
+f1=qw.Frame(window,width=200,height=200,bg="red")
+f1.pack(side=qw.TOP,fill=qw.X)  
+# f2=qw.Frame(window,width=200,height=200,bg="blue")
+# f2.pack(side=qw.LEFT)
+# f3=qw.Frame(window,width=200,height=200,bg="tan")
+# f3.pack(side=qw.LEFT)
+# f4=qw.Frame(window,width=200,height=200,bg="green")
+# f4.pack(side="top")
+
+b1=qw.Button(f1,text="click1")
+b2=qw.Button(f1,text="click2")
+b1.pack(side=qw.LEFT,expand=1,fill=qw.X,padx=10,pady=10)
+b2.pack(side=qw.LEFT,expand=1,fill=qw.X,ipadx=10,ipady=10)
+
+window.mainloop()
+```
+
+place()   绝对布局，组件的大小和位置不会随着窗口的大小而改变
+
+```python
+import tkinter as qw
+window=qw.Tk()
+window.geometry('1000x400')
+#x/y   相对于父元素的偏移量
+#relx/rely   参照于父元素的x，y
+#windth/height   定位时指定宽高
+#relwidth,relheight   [0-1]   参照于父元素的宽高
+f1=qw.Frame(window,width=200,height=200,bg="red")
+f1.place(x=100,y=100)
+f2=qw.Frame(f1,bg="blue")
+f2.place(x=100,y=100,width=100,height=100)
+#f2.place(x=100,y=100,relwidth=0.8,relheight=0.8)
+window.mainloop()
+```
+
+grid()     网格布局，通过表格的形式进行布局
+
+```python
+b1=qw.Button(window,width=5,height=5,text="click1")
+b2=qw.Button(window,width=5,height=5,text="click2")
+b3=qw.Button(window,width=5,height=5,text="click3")
+b4=qw.Button(window,width=5,height=2,text="click4")
+b5=qw.Button(window,width=5,height=5,text="click5")
+#sticky   组件在表格内的对齐方式
+b1.grid(row=0,column=0,padx=10,pady=10)
+b2.grid(row=0,column=1)
+b3.grid(row=1,column=0)
+b4.grid(row=1,column=1,columnspan=2,sticky=n)    #columnspan   横跨两列
+b5.grid(row=0,column=2)
+```
+
+- 弹框
+
+```python
+#弹框
+window=qw.Tk()
+window.geometry('600x400')
+def fn():
+    # qw.messagebox.showerror(title="error",message="出现错误")  #报错弹框
+    # qw.messagebox.showinfo(title="info",message="你选择了****")  #消息弹框
+    # qw.messagebox.showwarning(title="warning",message="这是一个警告")   #警告弹框
+    # qw.messagebox.askyesno(title="ask",message="确定？")    #询问弹框  结果值为bool类型    是  否
+    # qw.messagebox.askokcancel(title="ask",message="确定退出？")   #确定  取消
+    # qw.messagebox.askquestion(title="ask",message="是否关闭")   #返回YES NO    
+    # qw.messagebox.askretrycancel(title="ask",message="是否退出？")   #重试  取消    返回布尔值true  false
+    qw.messagebox.askyesnocancel(title="ask",message="是否退出？")   #是  否  取消
+b1=qw.Button(window,text="click",command=fn)
+b1.pack()
+```
+
+- 事件
+
+鼠标事件
+
+```python
+window.bind('<Button-1>',lambda x:print("左击"))
+window.bind('<Button-2>',lambda x:print("滚轮"))
+window.bind('<Button-3>',lambda x:print("右击"))
+#双击
+window.bind('<Double-Button-1>',lambda x:print("左双击"))
+window.bind('<Double-Button-2>',lambda x:print("滚轮双击"))
+window.bind('<Double-Button-3>',lambda x:print("右双击"))
+#三击
+window.bind('<Triple-Button-1>',lambda x:print("左键三击"))
+#移动
+window.bind('<B1-Motion>',lambda x:print("左键按下移动"))
+#离开
+window.bind('<ButtonRelease-1>',lambda x:print("左键抬起"))
+#移入移出
+window.bind('<Enter>',lambda x:print("鼠标移入"))
+window.bind('<Leave>',lambda x:print("鼠标移出"))
+#滚轮滚动
+window.bind('<Button-4>',lambda x:print("滚轮向上滚动"))
+window.bind('<Button-5>',lambda x:print("滚轮向下滚动"))
+```
+
+键盘事件
+
+```python
+e.bind('<Key>',lambda x:print("键盘按下"))
+e.bind('<KeyRelease>',lambda x:print("键盘抬起"))
+e.bind('<Return>',lambda x:print("回车"))
+e.bind('<Up>',lambda x:print("up"))
+e.bind('<Down>',lambda x:print("down"))
+e.bind('<Left>',lambda x:print("left"))
+e.bind('<Right>',lambda x:print("right"))
+e.bind('<Shift_L>',lambda x:print("左边的shift"))
+e.bind('<Shift_R>',lambda x:print("右边的shift"))
+e.bind('<Control_L>',lambda x:print("左边的ctrl"))
+e.bind('<Control_R>',lambda x:print("右边的ctrl"))
+e.bind('<Alt_L>',lambda x:print("左边的Alt"))
+e.bind('<Alt_R>',lambda x:print("右边的Alt"))
+e.bind('<Shift-R>',lambda x:print("shift+r"))
+```
+
+事件对象
+
+keycode   键盘码
+
+keysym    键盘符
+
+char         字符
+
+widget     事件源
+
+x-root      
+
+y-root
