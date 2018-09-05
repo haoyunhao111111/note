@@ -144,7 +144,7 @@ mytuple[0][0]="a"
 
 - 通过内建函数
 
-> mydict=dict(name="小红"，age="10")
+> mydict=dict(name="小红"，age="10")    
 
 - 通过映射函数
 
@@ -705,7 +705,9 @@ print(c.name)
 
 ​              python3和python2的一个区别就是python3可以直接使用
 
-- super().***    代替super(Class,self).***
+- super(). 
+- 
+- ***    代替super(Class,self).***
 - vars(object)    以字典的形式返回类或实例的属性
 
 #### 封装：
@@ -933,7 +935,7 @@ u=mod.urllopen('http:www.pyhton.org')
 2. 创建一个顶层对象，容纳整个GUI应用
 3. 在顶层窗口之上构建所有GUI组件
 4. 通过底层的应用代码将这些GUI组件连接
-5. 进入主事件循环
+5. 进入主事件循环     
 
 ##### 控件
 
@@ -1191,6 +1193,54 @@ def click(e):
 
 window.bind('<Button-3>',click)
 ```
+
+- 通过面向对象的方式来实现
+
+```python
+import tkinter as qw
+
+class Mywindow(qw.Tk):
+    def __init__(self):
+        super().__init__()
+        self.createmenu()
+        self.createscreen()
+        self.keys=[
+            ['MC','MR','MS','M+','M-'],
+            ['→','CE','C','+/-','we'],
+            [7,8,9,'x','/'],
+            [4,5,6,'+','-'],
+            [1,2,3,'=','.']
+        ]
+        self.createbutton()
+    def createmenu(self):
+        menubar=qw.Menu(self,tearoff=0)
+        self.configure(menu=menubar)
+        menu1=qw.Menu(menubar,tearoff=0)
+        menu1.add_command(label="标准型")
+        menu1.add_command(label="科学性")
+        menubar.add_cascade(label="查看",menu=menu1)
+        menu2=qw.Menu(menubar,tearoff=0)
+        menu2.add_command(label="复制")
+        menu2.add_command(label="粘贴")
+        menubar.add_cascade(label="编辑",menu=menu2)
+    
+    def createscreen(self):
+        self.screen=qw.Label(self,text="screen",bg="#333",width=30,height=3,anchor="e",font=('',20))
+        self.screen.grid(row=0,column=0,columnspan=5)
+
+    def createbutton(self):
+        for arr in self.keys:
+            for item in arr:
+                b1=qw.Button(self,text=item,width=2,height=1)
+                b1.grid(row=self.keys.index(arr)+1,column=arr.index(item),ipadx=30)
+                
+if __name__=="__main__":
+    window=Mywindow()
+    window.mainloop()
+
+```
+
+
 
 #### 布局
 
