@@ -265,7 +265,7 @@ apt-get clean && sudo apt-get autoclean   清除无用的包
 - 找到Configure并执行以下命令
   - ./configure --prefix=/usr/local/test  [--enable-optimizations]     prefix=/安装目录  [优化安装]
 - 编译   make all
-- 安装  make intall
+- 安装   make intall
 
 ##### 多版本共存
 
@@ -306,6 +306,7 @@ sudo etc/init.d/mysql         stop   start   restart
 
 - whoami   查看当前目录
 - who   查看用户
+- su      切换用户
 - useradd   添加用户
   - -m  自动创建家目录
   - -d   指定用户登录的起始目录 
@@ -325,7 +326,7 @@ sudo etc/init.d/mysql         stop   start   restart
 
 - home ls
 - cat etc/passwd
-- 从window用新账号登录ubuntu
+- 从window用新用户登录ubuntu
 
 
 
@@ -348,6 +349,28 @@ usermod -a -G sudo first
 usermod -a -G adm  first
 
 
+
+#### 更改文件的所有者
+
+chown   first:first  aaa       修改当前目录的拥有者
+
+>  chown    用户名:组名  目录
+
+chown  -R first:first  aaa    修改当前目录及其子目录的拥有者
+
+
+
+#### 更改文件权限
+
+chmod   u=rwx  g=rwx  o=rwx
+
+1->x  2->w  3->xw   4->r  5->rx  6->rw  7->rwx
+
+
+
+表明用python执行文件
+
+#! /usr/bin/env  python
 
 
 

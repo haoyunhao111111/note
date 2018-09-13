@@ -927,6 +927,12 @@ mod=importlib.import_module("urllib.request")
 u=mod.urllopen('http:www.pyhton.org')
 ```
 
+#### 模块
+
+- 内置模块
+- 自定义模块
+- 第三方模块
+
 ### GUI
 
 #### Tkinter编程步骤：
@@ -1392,3 +1398,9 @@ widget     事件源
 x-root      
 
 y-root
+
+
+
+### 模块
+
+- 内置模块
