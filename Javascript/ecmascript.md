@@ -1,5 +1,3 @@
-
-
 ## 一、组成：
 
 - ECMAscript
@@ -457,6 +455,10 @@ for(var i=0;i<arr.length;i++){
 
 > 把实现某一特定功能的代码块封装起来，并且能够重复调用。
 
+- 函数本身
+- 是一个对象
+- 构造函数（类）
+
 ### 定义函数：
 
 - 基本语法(function关键字)
@@ -666,7 +668,7 @@ let ASUS=new Computer
     
 ```
 
-- JSON
+- json(没有面向对象的特质，js独有的一种存储数据的对象)
 
 ```js
 let asus=
@@ -681,6 +683,10 @@ let asus=
 
 
 - class定义类，实例化对象
+
+```javascript
+
+```
 
 
 
@@ -1085,7 +1091,7 @@ event.returnValue=true;   //IE
 event.target     //目标事件源
 ```
 
-
+$(table).on("dbclick","td":not('.aa'),function(){})
 
 #### 移动端事件：
 

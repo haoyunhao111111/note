@@ -6,6 +6,7 @@
 
 ```js
 let box=document.getElementById("idname")    box:变量名     idname:ID名
+//返回值为类数组的集合
 ```
 
 - 获取类名的元素  集合
@@ -38,7 +39,7 @@ let obj=document.querySelectorAll("选择器")
 
 ### 自定义属性：
 
-- 获取：obj.getAttribute()name
+- 获取：obj.getAttribute(name)
 - 设置：obj.setAttribute(name,value)
 
 ## 操作样式：
