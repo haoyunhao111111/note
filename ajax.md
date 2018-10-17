@@ -25,14 +25,31 @@
 
 text blob documwnt json arraybufer
 
+### ajax请求页面：
+
+#### 主动请求
+
+>  link   script   img   background    ajax  audio   video
+
+#### 被动请求
+
+> a  from 
 
 
 
+### 优缺点
 
-open里面的参数
+业务逻辑在服务器
 
-open("get","/",true，)      ("传递方式"，“地址”，“异步->true(默认)/同步->false”)
+优点：业务逻辑清晰，工作量少。首页加载速度快
 
+缺点：用户体验不好，服务器压力大（业务逻辑在服务器）不利于协同工作
+
+ajax
+
+优点：用户体验比较流畅，减轻服务器压力，有利于协同工作；
+
+缺点:首页加载速度慢，业务逻辑不清晰，工作量比较大
 
 
 

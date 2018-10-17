@@ -53,13 +53,14 @@
 
 #### 属性：
 
-- lacation.ref   设置或获取页面的地址；
+- lacation.href   设置或获取页面的地址；
 - location.host   主机名＋端口号
 - location.hostname     主机名
 - location.port      端口号
 - location.protocol     协议
 - location.pathname     路径
 - location.search   问号后的搜索路径
+- location.hash   哈希值
 
 #### 方法：
 
