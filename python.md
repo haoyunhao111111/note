@@ -109,7 +109,7 @@ arr+[4,5,6]+[7,8,9]   #合并多个
 
 ### 元组 
 
-> mytuple=(1,2,3,4)
+> mytuple=(1,2,3,4) 
 
 #### 注意：
 
@@ -1401,3 +1401,61 @@ y-root
 
 
 
+### Flask蓝图
+
+```python
+#主文件
+from head import head
+app.register_blueprint(head,url_prefix="/head")   #prefix   设置访问路径以**开头
+
+#子文件
+from flask import Blueprint,request
+head=Blueprint("head",__name__)
+@head.route("/addhead")
+def addhead():
+    cid=request.args.get("cid")
+    chead = request.args.get("chead")
+    cur.execute("update cat set chead=%s where cid=%s",(chead,cid))
+    db.commit()
+    return "ok"
+```
+
+### Flask下载文件
+
+```python
+from flask import make_response,send_from_directory
+res = make_response(send_from_directory("./cursor", "model.xlsx", as_attachment=True))
+                        #发送文件组件       文件地址     文件名字    
+res.headers["content-disposition"] = "attachment;filename=1.xlsx"
+#设置头信息                              附件         下载后的文件名字
+return res
+```
+
+### Flask上传文件
+
+```python
+#form表单上传文件
+<form methods="post" enctype="">
+	<input tyoe="file" name="file">
+</form>
+
+#接受文件
+from werkzeug import secure_filename
+
+#定义接受文件的格式
+ALLOWED_EXTENSIONS = set(['xlsx'])
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+file=request.files["file"]
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)   #secure_filename   判断文件名是否重复
+        file.save(filename)   #保存文件
+```
+
+
+
+
+
+ 
