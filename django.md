@@ -160,4 +160,120 @@ python manage.py createsuperuser
 
 
 
-362201199708084425 
+Student.objects.create(name=name,tel=tel,c=c)
+
+
+
+```python
+Course.objects.filter(id=id).delete()
+```
+
+
+
+csrf_token   jinjia的标签  (jinjia函数  必须有返回值，)   跨域[令牌,解决跨域问题   
+
+
+
+## ModelForm
+
+```python
+class Meta:
+    model=User  #验证的模型
+    fields="__all__"  #验证的字段，是一个集合
+    widgets={
+        'name':forms.TextInput(attrs={'class':'aaa'})
+    }
+    lables={
+        'name':"姓名"
+    }
+    error_messages={
+        'name':{'required':"必填"}
+    }
+```
+
+
+
+
+
+save可以直接保存一对一，一对多，多对多
+
+注意：在多对多中如果使用了save(commit=False)  还需执行一下   form.save_m2m()
+
+
+
+
+
+
+
+collectstatic
+
+
+
+from django.utils.deprecation import MiddlewareMixin
+
+
+
+
+
+process_request    不能有return
+
+process_response     必需有return
+
+process_view()   不能有return
+
+process_exscption  可以有return  也可以没有
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

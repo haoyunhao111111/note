@@ -53,7 +53,7 @@
 
 #### 属性：
 
-- lacation.href   设置或获取页面的地址；
+- location.href   设置或获取页面的地址；
 - location.host   主机名＋端口号
 - location.hostname     主机名
 - location.port      端口号

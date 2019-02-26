@@ -488,6 +488,12 @@ cc(4)(5)
 f=open("filename",mode)
 # filaname:文件路径
 # mode:操作方式；
+
+f=open(r'C:\Users\hyh\Desktop\data.txt')
+data=[]
+for line in f:
+    d=list(map(float,line.split('\t')))
+    data.append(d)
 ```
 
 
