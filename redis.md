@@ -213,12 +213,12 @@ redis-trib.rb文件在 /usr/share/doc/redis-tools/examples 中
 pip install redis-py-cluster
 from rediscluster import StrictRedisCluster
 startup_nodes = [
-    {"host":"192.168.1.110", "port":7000},
+    {"host":"192.168.1.110", "port":7000},s/
     {"host":"192.168.1.110", "port":7001},
     {"host":"192.168.1.110", "port":7002},
     {"host":"192.168.1.110", "port":7003},
     {"host":"192.168.1.110", "port":7004},
-    {"host":"192.168.1.110", "port":7005}
+    {"host":"192.168.1.110", "port":7005}x
 ]
 rc = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=True)
 rc.set('name','admin')

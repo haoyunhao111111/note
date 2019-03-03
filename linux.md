@@ -81,8 +81,6 @@ var   经常变换的文件
 
 run  内存
 
-
-
 #### 查看文档命令
 
 - man   f->翻页   q->退出
@@ -371,6 +369,14 @@ chmod   u=rwx  g=rwx  o=rwx
 表明用python执行文件
 
 #! /usr/bin/env  python
+
+
+
+### 添加全局变量
+
+- export PATH=$PATH:/
+- vim ~/.profile
+- 软链  sudo ln -s /usr/local/nginx/sbin/nginx  /usr/bin/nginx
 
 
 
