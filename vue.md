@@ -137,7 +137,7 @@ locolStorage.clear    清空
 </script>
 ```
 
-- create
+- created
 
 > 在created中，data和methods等都已经被初始化好了，所以`如果要用到methods中的方法或者操作data中的数据，最早只能在created中操作 `
 
@@ -154,7 +154,7 @@ locolStorage.clear    清空
                 console.log("我是show方法")  
             }
         },
-        beforeCreate() {
+        created() {
             console.log(this.msg)  //输出  hello
             this.show()     //输出  我是show方法
         }
@@ -167,7 +167,7 @@ locolStorage.clear    清空
 > 接着下来，vue开始编辑模板，执行vue的代码，最终会在内存中生成一个编译好的最终模板字符串，紧接着渲染为内存中的DOM，也就是说，此函数在执行的时候，只是在内存中渲染好了模板，而没有`把模板挂载到真正的页面中去`，这个阶段，页面还是旧的 
 
 ```vue
-<div id="#app">
+<div id="app">
     <h1 id="aa">{{msg}</h1>
 </div>
 

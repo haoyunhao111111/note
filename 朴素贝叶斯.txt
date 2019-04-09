@@ -1,0 +1,61 @@
+1.练习
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+wordList=['my name is David',
+             'you are stupid',
+             'my boyfriend is NB',
+             'you looks very smart I like you very much']
+classList=[0,1,1,0]
+
+tfidf2 = TfidfVectorizer()
+result = tfidf2.fit_transform(wordList)
+print(tfidf2.get_feature_names())
+# print(result.shape)
+result=result.toarray()
+print(np.round(result),2)
+#result=result.toarray()
+
+from sklearn.naive_bayes import GaussianNB
+
+gnb=GaussianNB()
+model=gnb.fit(np.array(result),np.array(classList))
+testWords=['I like you']
+res = tfidf2.transform(testWords)
+res=res.toarray()
+model.predict(res)
+2.中文垃圾邮件分类处理
+import jieba
+import re
+import numpy as np
+   
+def textParse1(lines):
+    lines=re.sub(r'[a-zA-Z.【】0-9、。，@（）+""“”,:<>()：|？?\[\]\-/！…~\*\n]','',lines)
+    words=jieba.lcut(lines)
+    new=[[w for w in words if len(w)>1]]
+    document=[" ".join(sent) for sent in new]
+    return document
+
+wordList=[];classList=[]
+for i in range(127):  
+    wordList_s=textParse1(open('G:\\代码\\新建文件夹\\朴素贝叶斯垃圾邮件分类\\垃圾邮件\\%d.txt'%i,encoding='utf8').read())
+    wordList.append(','.join(wordList_s))
+    classList.append(1)
+for i in range(29):   
+    wordList_h=textParse1(open('G:\\代码\\新建文件夹\\朴素贝叶斯垃圾邮件分类\\正常邮件\\%d.txt'%i,encoding='utf8').read())
+    wordList.append(','.join(wordList_h))
+    classList.append(0)
+      
+tfidf1 = TfidfVectorizer()
+result1 = tfidf1.fit_transform(wordList)
+# print(tfidf2.get_feature_names())
+# print(result.shape)
+# print(result)
+result1=result1.toarray()
+print(result1)
+
+gn=GaussianNB()
+gn=gn.fit(np.array(result1),np.array(classList))
+testWords=textParse1(open('G:\\代码\\新建文件夹\\朴素贝叶斯垃圾邮件分类\\垃圾邮件\\1.txt',encoding='utf8').read())
+res1 = tfidf1.transform(testWords)
+res1=res1.toarray()
+gn.predict(res1)

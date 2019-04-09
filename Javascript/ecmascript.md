@@ -1170,7 +1170,7 @@ now.getTime()    //当前时间到1970年1月1日00:00
 - 通过实例化对象
 
 ```js
-let red=new RegExp("正则表达式"，"模式修正符")   
+let red=new RegExp("正则表达式"，"模式修正符")   ``
 let red=new RegExp("uek"，"g")  
 //模式修正符      g全局    i不区分大小写      m换行
 ```
