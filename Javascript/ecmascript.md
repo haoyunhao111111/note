@@ -65,25 +65,25 @@
 
 - 弹出框
 
-  ```html
+  ```javascript
   alert(1);    alert('a');
   ```
 
 - 输出到控制台(不可以识别标签对)
 
-  ```html
+  ```javascript
   console.log(1);
   ```
 
 - 输出到页面中(可以识别标签对)
 
-  ```html
+  ```javascript
   document.writer("<b>加粗</b>");document.writer("<i>倾斜</i>");
   ```
 
 #### 输入工具：
 
-```html
+```javascript
 prompt(提示文本，默认值)
 ```
 
@@ -114,25 +114,25 @@ prompt(提示文本，默认值)
 
 - 先声明，后赋值。
 
-  ```html
+  ```javascript
   var num; num=10
   ```
 
 - 声明的同时赋值;
 
-  ```html
+  ```javascript
   var a=10;
   ```
 
 - 一次性先声明多个变量，再赋值；
 
-  ```html
+  ```javascript
   var a,b,c;  a=1;b=2;c=3;
   ```
 
 - 一次性声明多个变量并赋值
 
-  ```html
+  ```javascript
   var a=1,b=2,c=3;
   ```
 
@@ -149,7 +149,7 @@ prompt(提示文本，默认值)
 
 > 根据数据在内存中的存储位置划分，基本类型存放在栈中，引用数据类型存放在堆中(指针存放在栈中，内容存放在堆中)。
 
-#### 基本数据类型：
+#### 基本数据类型（值类型）：
 
 - undefined
 
@@ -171,7 +171,16 @@ prompt(提示文本，默认值)
 
 #### 引用数据类型：
 
-- object  (属性与方法的集合) 数组、函数、对象
+- 对象
+  - {}  普通对象
+  - []  数组
+  - /^/  正则
+  - Math   
+  - ...
+- 函数
+  - function  普通函数
+  - 类
+  - ...
 
 #### typeof
 
