@@ -243,5 +243,68 @@ console.log(f());
 console.log(g());
 ```
 
+#### 关于重名的处理
 
+> 在变量提升阶段，如果名字重复了，不会重新的进行声明，但是会重新的进行定义(后面赋的值会把前面赋的值给替换掉)
+
+```javascript
+fn();  // =>4
+function fn(){console.log(1);}
+fn();   // =>4
+function fn(){console.log(2);}
+fn();   // =>4
+var fn=13;
+fn();  // => 报错
+function fn(){console.log(3);}
+fn();
+function fn(){console.log(4);}
+fn();
+```
+
+### 闭包
+
+#### 作用域
+
+> 全局作用域：window
+>
+> 私有作用域：函数执行
+>
+> 块级作用域：使用Let创建变量存在块级作用域
+
+#### 查找私有变量
+
+js中私有变量有且只有两种
+
+1. 在私有作用域变量提升阶段声明过的变量(或者函数)
+2. 形参也是私有变量
+
+##### 函数执行的完整步骤
+
+> 形参赋值->变量提升->代码智商而下执行->当前私有作用域销毁或者不销毁
+
+```javascript
+var x=10,
+    y=20,
+    z=30;
+function fn(x,y){
+    console.log(x,y,z);
+    var x=100;
+    y=200;
+    z=300;
+    console.log(x,y,z);
+}
+fn(x,y,z);
+console.log(x,y,z);
+```
+
+```javascript
+function fn(b){
+    console.log(b);
+    function b(){
+        console.log(b);
+    };
+    b();
+};
+fn(1);
+```
 
