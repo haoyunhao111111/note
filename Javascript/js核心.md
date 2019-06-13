@@ -195,7 +195,7 @@ console.log(fn);  // 函数本身
 
 #### 不管条件是否成立都要进行变量提升
 
-- 不管条件是否成立，判断体中出现的var/function都要进行变量提升，但是在最新版浏览器中，function声明的变量只能提前声明不能定义了（前提：函数是在判断题中）
+- 不管条件是否成立，判断体中出现的var/function都要进行变量提升，但是在最新版浏览器中，function声明的变量只能提前声明不能定义了（前提：函数是在判断体中）
 
   ```javascript
   console.log(num);   //undefined
@@ -280,14 +280,14 @@ js中私有变量有且只有两种
 
 ##### 函数执行的完整步骤
 
-> 形参赋值->变量提升->代码智商而下执行->当前私有作用域销毁或者不销毁
+> 形参赋值->变量提升->代码自上而下执行->当前私有作用域销毁或者不销毁
 
 ```javascript
 var x=10,
     y=20,
     z=30;
 function fn(x,y){
-    console.log(x,y,z);
+    console.log(x,y,z);  
     var x=100;
     y=200;
     z=300;
@@ -308,3 +308,23 @@ function fn(b){
 fn(1);
 ```
 
+`函数执行形成一个私有作用域(A),A的上一级作用域跟它在哪执行没有关系，只跟在哪定义的有关`
+
+#### 作用
+
+> 形成私有作用域，保护里面的私有变量·不受外界的干扰
+
+- jQuery实现全局调用里层方法
+
+```javascript
+(function(window,undefiend){
+     var jQuery=function(){
+        ....
+    }
+	window.jQuery=window.$=jQuery
+ })(window)
+jQuery()
+$()
+```
+
+> 真实项目中，我们利用闭包保护机制，实现多人协同开发(避免多人同一个命名导致代码冲突的问题)
