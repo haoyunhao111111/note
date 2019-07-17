@@ -152,7 +152,7 @@ console.log(a)  //=>12
 
 #### 作用域链
 
-> 函数执行形成一个私有的猪链（保护私有变量），进入到私有作用域中，首先变量提升（什声明过的变量私有的）接下来代码执行
+> 函数执行形成一个私有的作用域链（保护私有变量），进入到私有作用域中，首先变量提升（什声明过的变量私有的）接下来代码执行
 
 1. 执行的时候遇到一个变量，如果这个变量是私有变量，闭包机制
 2. 如果当前变量不是私有变量，我们需要向他的上级作用域进行查找，上级如果也没有，则继续向上查找，一直到window全局作用域为止，我们把这种查找机制叫做`作用域链`
@@ -312,7 +312,9 @@ fn(1);
 
 #### 作用
 
-> 形成私有作用域，保护里面的私有变量·不受外界的干扰
+##### 保护
+
+> 形成私有作用域，保护里面的私有变量不受外界的干扰
 
 - jQuery实现全局调用里层方法
 
@@ -328,3 +330,186 @@ $()
 ```
 
 > 真实项目中，我们利用闭包保护机制，实现多人协同开发(避免多人同一个命名导致代码冲突的问题)
+
+##### 保存
+
+> 函数执行形成一个私有作用域，函数执行完成之后，形成的这个栈内存一般会自动释放
+
+```javascript
+function fn(){
+    var i =1;
+    return function(n){
+        console.log(n+i++)
+    }
+}
+var f=fn()
+f(10)
+fn()(10)
+f(20)
+fn()(20)
+```
+
+> 先进行的全局的变量提升，然后自上而下代码执行，`var f = fn()`把fn()的返回值赋值给f，因为返回值为函数，执行时开辟内存空间，f执行新开辟的内存空间，因为f占用新开辟的内存空间，因此执行后不会被销毁，
+>
+> fn()(10) 先执行fn(),把fn的返回值进行二次执行
+
+![](https://image.coolcustomer.cn/19c9ff5c-10f5-4399-b1bb-92a3007f8b12)
+
+### this
+
+> 当前函数执行的主体(谁执行的函数，this指向谁)
+>
+> ```this是跟它在哪定义的以及在哪执行的没有任何关系```
+
+- 函数以外的this是window
+
+```javascript
+function fn(){
+	console.log(this)  //window
+}
+fn()
+// fn() == window.fn()
+function fn(){
+	function b(){
+		console.log(this) //window
+	}
+	b()
+}
+fn()
+```
+
+#### 规律
+
+- 在js非严格模式下(默认模式就是非严格模式)
+  - 自执行函数中的this就是widow
+
+    ```javascript
+    var obj={
+    	fn:(function(){
+    		console.log(this)  // this
+    		return function(){}
+    	})()
+    }
+    ```
+
+- 给元素的某个事件绑定方法，当事件丑法执行对应方法的时候，方法中的this一般都是当前元素操作的元素本身
+
+  ```javascript
+  obox.onclick = function(){
+      // this -> obox
+  }
+  ```
+
+- 当方法执行，看看方法名前面是否有`.`,有的话`.`前面是谁，this指向谁，没有的话，this一般指向window
+
+  ```javascript
+  var obj={
+  	fn:function(){
+  		console.log(this)
+  	}
+  }
+  obj.fn() // this -> obj
+  var f = obj.fn
+  f() // this -> window
+  ```
+
+- 在js严格模式下(让js更加严谨)
+
+  > 开启严格模式：在当前作用域的第一行加`use strict`,name当前模式执行的js代码，就是按照严格模式处理的
+
+  ```javascript
+  <script>
+  "use strict"; //整个js代码开启严格模式
+  </script>
+  <script>
+  	~function(){
+  		"use strict"; // 只是把当前私有作用域开启了严格模式，对外面全局没有影响
+  	}()
+  </script>
+  ```
+
+  - 在js严格模式下，如果执行主体不明确，this指向undefined
+
+    ```javascript
+    <script>
+    "use strict"; //整个js代码开启严格模式
+    function fn(){
+    	console.log(this)
+    }
+    fn()  // this->undefined
+    window.fn() // this->window
+    </script>
+    ```
+
+
+#### 闭包、this指向、作用域综合练习
+
+```javascript
+var num=1,
+	obj={
+		num:2,
+		fn:(function(num){
+			this.num*=2
+			num+=2;
+			return function(){
+				this.num*=3;
+				num++;
+				console.log(num) 
+			}
+		})(num)
+	}
+var fn=obj.fn;
+fn()
+obj.fn()
+console.log(num,obj.num)
+```
+
+解析过程
+
+1. 全部作用域下变量提升
+
+   > num -> undefined , obj->undefined, fn -> undefined
+
+2. 代码自上而下执行
+
+   > 1. 解析obj(obj为引用类型，开辟内存空间：aaa000)
+   >
+   >    1. num=2
+   >
+   >    2. fn：自执行函数(引用类型，开辟内存空间：aaa111)
+   >
+   >       1. 形参赋值 num=1
+   >
+   >       2. 变量提升 无
+   >
+   >       3. 代码执行
+   >
+   >          > this.num*=2  // this指向window；window.num->2
+   >          >
+   >          > num+=2  // 形参num+=2 -> 3
+   >          >
+   >          > return aaa222 // function为函数，开辟内存空间：aaa222
+   >
+   >    3. 将自执行函数的返回值赋予fn；fn->aaa222  // 因为aaa111开辟的堆内存aaa222被aaa111以为的占用，所以aaa111不销毁
+   >
+   > 2. fn = obj.fn ; // fn指向aaa222
+   >
+   > 3. fn()  // 开辟一个内存空间aaa333，将aaa222中的代码复制执行
+   >
+   >    1. this.num**=3 // this指向window；window.num*=3 ->window.num=6
+   >    2. num++   // num不是aaa222私有的，向上一级aaa111查找 ，num++ -> num=4
+   >    3. console.log(4)
+   >    4. aaa333销毁
+   >
+   > 4. obj.fn() // 开辟一个内存空间aaa444，将aaa222中的代码复制执行
+   >
+   >    1. this.num*=2  //this指向obj；obj.num*=3  ->  obj.num = 6
+   >    2. num++    // num不是aaa222私有的，向上一级aaa111查找 ，num++ -> num=5
+   >    3. console.log(5)
+   >    4. aaa444销毁
+   >
+   > 5. console.log(6,6)
+
+   
+
+   ![](https://image.coolcustomer.cn/cb3a9b24-d357-4273-a71c-25ac4a02ac47 )

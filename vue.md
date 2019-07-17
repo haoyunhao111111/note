@@ -1,50 +1,6 @@
-
-
 ## mvvm
 
 > model ->模型->数据  view->视图->html+css    数据到视图，视图到数据，双向数据绑定  优点>缺点
-
-```vue
-<div class="app">  //指定vue的作用范围
-    <input type="text" v-model="one">+<input type="text" v-model="two">=<span v-text="result()"></span>
-</div>
-</body>
-<script>
-    new Vue({
-        el:".app",  //说明vue的作用范围
-        
-        
-        
-        data:{        //设置数据，json格式
-            one:0,
-            two:0
-        }
-        
-        
-         methods:{     //方法  存放逻辑
-            result(){
-                return this.one*1+this.two*1
-            }
-        },
-            
-            
-             computed:{    //只运行有关于自己的
-             result(){
-                return this.one*1+this.two*1
-            }
-        },
-            
-            
-             watch:{
-            one(one,two){    //one：改变后的值；two:改变前的值
-                console.log(one,two)
-            }
-         }
-    })
-    
-    :style="background:(item.isdone?red:none)"
-</script>
-```
 
 ## 双向数据绑定的原理
 
@@ -67,21 +23,341 @@
             return aa
         }
     })
-    
-    
-    
     obj.name="zhangsan"
     console.log(obj.name)
     obj.name="lisi"
 </script>
 ```
 
+## 过滤器
 
+> 原数据不变的情况下，只改变显示的效果
+
+```html
+<div id="app">
+    <div>{{a+b | toFixed(3)}}</div>
+</div>
+```
+
+```javascript
+<script>
+   new Vue({
+    el:'#app',
+    data:{
+      a:0.1,
+      b:0.2
+    },
+    filters:{
+      toFixed(input,params){  // input:过滤器前面的结果,params:过滤器所传入的参数,当前的this指向window
+        return input.toFixed(params)
+      }
+    }
+   })
+</script>
+```
+
+```javascript
+// 将方法挂载到Vue原型上，在new出的每一个实例都具有该方法
+<script>
+    Vue.filter('toFixed',function(data){
+    	return data+'全局过滤器'
+	})
+   new Vue({
+    el:'#app',
+    data:{
+      a:0.1,
+      b:0.2
+    },
+   })
+</script>
+```
+
+## 修饰符
+
+### 修饰符
+
+- .number
+
+```html
+<input type="number" v-model.number='number'>  <!-- 只允许输入数字 -->
+```
+
+- .lazy
+
+```html
+<input type="number" v-model.lazy='number'>  <!-- 输入框失去焦点后才进行数据才发生变化 -->
+```
+
+
+
+### 按键修饰符
+
+- .enter
+- .ctrl
+- .keyCode
+
+### 事件修饰符
+
+- .stop  阻止事件的冒泡行为
+
+> 作用相当于`e.cancelBubble=true`和`e.stopPropagation()`
+
+```javascript
+<div id="app">
+    <div @click='zuxian'>祖先元素
+      <div @click='fu'>父元素
+        <div @click.stop='zi'>子元素</div>
+      </div>
+    </div>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{},
+      methods:{
+        zuxian(){
+          alert('zuxian')
+        },
+        fu(){
+          alert('fu')
+        },
+        zi(e){
+          // alert('zi',e.cancelBubble=true)
+          // alert('zi',e.stopPropagation())
+          alert('zi')
+        }
+      }
+    })
+  </script>
+```
+
+- .captrue
+
+> `捕获事件`，以下代码弹出顺序为 zuxian->zi->fu
+
+```javascript
+<div id="app">
+    <div @click.capture='zuxian'>祖先元素
+      <div @click='fu'>父元素
+        <div @click='zi'>子元素</div>
+      </div>
+    </div>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{},
+      methods:{
+        zuxian(){
+          alert('zuxian')
+        },
+        fu(){
+          alert('fu')
+        },
+        zi(e){
+          alert('zi')
+        }
+      }
+    })
+  </script>
+```
+
+- .prevent
+
+> 阻止默认行为
+
+```javascript
+<div id="app">
+    <div @click.capture='zuxian'>祖先元素
+      <div @click='fu'>父元素
+        <div @click='zi'>子元素</div>
+      </div>
+    </div>
+    <a href="http://www.baidu.com" @click.prevent='zuxian'></a>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{},
+      methods:{
+        zuxian(){
+          alert('zuxian')
+        }
+      }
+    })
+  </script>
+```
+
+- .once  该事件只执行一次
+
+> 第一次点击zi：弹框顺序 zi->fu->zuxian  第二次点击zi：弹框顺序 zi->zuxian 
+
+```javascript
+<div id="app">
+    <div @click='zuxian'>祖先元素
+      <div @click.once='fu'>父元素
+        <div @click='zi'>子元素</div>
+      </div>
+    </div>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{},
+      methods:{
+        zuxian(){
+          alert('zuxian')
+        },
+        fu(){
+          alert('fu')
+        },
+        zi(e){
+          alert('zi')
+        }
+      }
+    })
+  </script>
+```
+
+- .self 只有点击自己时才会执行，不受冒泡影响
+
+```javascript
+<div id="app">
+    <div @click='zuxian'>祖先元素
+      <div @click.self='fu'>父元素
+        <div @click='zi'>子元素</div>
+      </div>
+    </div>
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{},
+      methods:{
+        zuxian(){
+          alert('zuxian')
+        },
+        fu(){
+          alert('fu')
+        },
+        zi(e){
+          alert('zi')
+        }
+      }
+    })
+  </script>
+```
+
+## axios
+
+```javascript
+axios.get('/app/sdfkof',{})
+    .then(function(res){
+    	console.log(res)
+    })
+    .catch(function(error){
+    	console.log(error)
+    })
+// axios.请求方式('请求地址',传入的参数).访问成功的函数.访问失败的函数
+```
+
+### promise-axios
+
+```javascript
+let a=''
+function buy(){
+    setTimeout(()=>{
+        a='buy'
+    },2000)
+}
+buy()
+function get(){
+    console.log(a)
+}
+//异步：首先想到回调函数(将后续要处理的逻辑传入到当前要做的事，事情做好后再调用此函数)
+let a=''
+function buy(callback){
+    setTimeout(()=>{
+        a='buy';
+        callback
+    },2000)
+}
+buy(function get(val){
+    console.log(val)
+})
+
+```
+
+> promise:解决回调逻辑,成功态，失败态，等待态。
+>
+> js原生自带
+
+```javascript
+// resolve:代表的是转向成功态
+// reject:代表的是转向失败态
+// Promise的实例就一个then方法，then方法有两个参数
+let p = new Promise((resolve,reject)=>{
+    setTimeout(function(){
+        let a ='buy';
+        resolve(a)
+    },2000)
+});
+p.then((res)=>{console.log(res)},()=>{})
+```
+
+## computed
+
+> 计算`属性`,不是方法,不能与data,methods重名
+
+> 里面的对象会有get(),set()方法，都指向实例
+
+```javascript
+<div id="app">
+    <div v-if='isTrue'>true</div>
+<div v-else>false</div>
+</div>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+    el:'#app',
+    data:{
+        all:[{a:true},{a:true},{a:true}]
+    },
+    computed:{
+        isTrue:{ // 如果计算属性是函数，默认调用get()
+            get(){ // get和set都指向实例，默认获取isTrue的值，所以会调用get()方法
+                return this.all.every(p=>p.a)
+            },
+            set(val){
+                this.all.forEach(p=>p.a=val)
+            }
+        }
+    }
+})
+</script>
+```
+
+
+
+- 方法不会有缓存，computed会根据依赖(归vue管理的数据，可以响应式)
 
 ## 指令
 
-- v-model  只能用于表单
+> dom元素的行间属性，vue提供了内置的指令，必须以v-开头，后面的值均为变量
+
+- v-model  只能用于表单，会忽略掉value,checked,selected,将数据绑定到视图上，数据修改后会影响视图的变化
+  - 如果是复选框，只有一个复选框的时候，会把此值转化为boolean类型，true代表选中。
+  - 如果是多个checkbox，要增加value属性，并且数据类型是数组
 - v-text      用于表单以外
+- v-if 操作的是dom，不满足条件，里面的代码不会执行
+- v-show:操作的是样式
+
+> 如果频繁的切换dom，用v-show更好，如果一开始数据就能确认下来，用v-if更好
 
 ## 路由
 
@@ -92,12 +368,63 @@
 > 完整的数据，逻辑，组件
 
 ```vue
-Vue component("car",        //函数名
-	template:'aa',         //aa:html代码
-	data(){return(bb)}，     //bb:数据   data后跟一个函数，返回值为JSON对象
-	methods:{},
-	。。。
-) 
+// 子组件
+<template>
+  <div class="home">
+    <li>
+      <input type="checkbox" v-model="check">
+      <slot name='item' v-bind="{check}"></slot>  // v-bind="{check}" 向父组件传值
+    </li>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    item: {
+      type: String
+    }
+  },
+  data () {
+    return ({
+      check: false
+    })
+  }
+}
+</script>
+// 父组件
+<template>
+  <div id="app">
+    <input type="text" name="" id="" v-model='con'>
+    <button @click='add'>添加</button>
+    <my-slot v-for='item in list' :key='item'> // 每一个item都拥有一份独立的 data , 这也是data是一个函数而不是对象的原因
+      <template v-slot:item='item1'> // v-slot:item='item1' 接收子组件传递的值，是一个对象
+        <span slot="item" :style='{color:item1.check?"red":"blue"}'>{{item}}</span>
+      </template>
+    </my-slot>
+  </div>
+</template>
+<script>
+import mySlot from './views/slot.vue' // 引入子组件
+export default {
+  name: 'app',
+  components: {
+    mySlot // 注册组件
+  },
+  data () {
+    return ({
+      con: '',
+      list: []
+    })
+  },
+  methods: {
+    add () {
+      this.list.push(this.con)
+      this.con = ''
+    }
+  }
+}
+</script>
 ```
 
 
@@ -263,51 +590,3 @@ locolStorage.clear    清空
 - destroyed
 
 > 当执行到destroyed函数的时候，组件已经被完全销毁了，此时组件中的data,methods等等都已经不可用了 
-
-
-
-2
-
-vue  init  webpack    aaaa
-
-use   no  
-
- set up  no
-
-e2e  no
-
-npm run dev
-
-
-
-3
-
-@vue/cli
-
-vue create bbb
-
-
-
-babel  vuex   router  y y
-
-npm run serve
-
-
-
-## http协议下的URL标准格式
-
-URL：统一资源定位符
-
-URI：统一资源标识符
-
-
-
-url格式:    协议：//主机地址：端口/路径/文件名?查询字符串#锚链接
-
-
-
-
-
-### vuex
-
-> 用来管理组件之间的数据

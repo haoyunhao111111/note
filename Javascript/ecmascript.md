@@ -514,13 +514,7 @@ variable()
 functionName()
 ```
 
-
-
 - 自变量+()
-
-
-
-
 
 ### 参数：
 
@@ -660,8 +654,6 @@ let aa=(item)=>{
 }
 aa(小白)
 ```
-
-
 
 ## 十四、对象：
 
@@ -1155,7 +1147,7 @@ now.SetUTCMillliseconds()  //设置毫秒
 let now=new Date()
 now.getFullYear()  //获取当前年份
 now.getMonth()  //获取当前月份
-now.getDate()  //获取当前年份
+now.getDate()  //获取当前日期
 now.getHours()  //设置小时
 now.getMinutes()  //设置分钟
 now.getSeconds()  //设置秒数
