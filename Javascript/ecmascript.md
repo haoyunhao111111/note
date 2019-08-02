@@ -806,7 +806,7 @@ arr.includes(5)  //判断是否包含某个数
 arr.slice(star,end)
 ```
 
-### 连接多个数组：
+### 连接多个数组： 
 
 ```js
 newarr=arr.concat()

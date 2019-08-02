@@ -513,3 +513,149 @@ console.log(num,obj.num)
    
 
    ![](https://image.coolcustomer.cn/cb3a9b24-d357-4273-a71c-25ac4a02ac47 )
+
+### 单例模式
+
+我们把对象数据类型实现`把描述同一件事务的属性或者特征归纳汇总在一起，以此来避免全局变量的冲突问题`的方式和思想就是`单例设计模式`
+
+> 在真实项目中，为了实现模块化开发或者团队协作开发，我们经常应用单例模式(一般业务逻辑部分的代码都是依托单例模式设计规划的)
+
+> 由来：很久很久以前，js中都是值类型，没有引用数据类型
+
+```javascript
+var name = '张三'
+var name = '李四'
+// 全局变量污染 全局变量冲突
+```
+
+> 对象数据类型：把描述同一件事务的特征或者属性，进行汇总（放在一起），以此来避免全局变量之间的冲突
+
+#### 使用单例模式实现模块化开发
+
+> 在当前的命名空间下调取其他命名空间的方法，指定好对应的命名空间名字即可，使用[nameSpace].[property]
+
+```javascript
+// 项目组长:公共模块
+var utils = {
+    
+}
+// 张三:搜索
+var searchModel = {
+    submit:function(){}
+}
+// 李四:天气
+var weatherModel = {
+    setWeather:function(){
+        // 调取其他命名空间方法
+        searchModel.sublmit()
+        // 调取自己的方法
+        this.getWeather()
+    },
+    getWeather:function(){}
+}
+```
+
+#### 高级单例模式
+
+> 基于Js高阶编程技巧`惰性思想`来实现单例模式,并且可以把一些常用的设计模式(`命令模式`,`发布订阅模式`,`promise模式`)融合进来，最后清晰的规划我们的业务逻辑代码，方便二次的开发和维护，这种设计思想综合体就是高级单例模式，也是项目中最常应用的
+
+```javascript
+var searchModel = (function(){
+    function submit(){
+        ...
+    }
+    return {
+        submit:submit
+    }
+})()
+searchModel:submit
+```
+
+#### 面向对象(OOP)
+
+> 对象：万物皆对象
+>
+> 类：对象的具体细分
+>
+> 实例：某一类中具体的事物 
+
+##### JS中常用的内置类
+
+- 关于数据类型
+
+  - Number  每一个数字或者NaN都是他的一个实例
+  - String：字符串类
+  - Boolean：布尔
+  - Null
+  - Undefined(浏览器屏蔽了我们操作Null或者Undefined这个类) 
+  - Object:对象类，每一个对象类型都是他的实例
+    - Array 数组类
+    - RegExp 正则类
+    - Date  日期类
+    - ...
+  - function：函数类，每一个函数都是他的一个实例
+
+- 元素对象和元素集合
+
+  - HTMLCollection:元素集合类
+
+    ```javascript
+    getElementsByTagName
+    getElementsByClassName
+    querySelectorAll
+    ```
+
+  - NodeList:节点集合类
+
+    ```javascript
+    getElementsByName
+    childNodes
+    ```
+
+
+
+### 原型与原型链
+
+#### 原型
+
+1. 函数中的prototype属性
+
+   1. 每一个函数都有一个prototype属性，他默认指向一个object空对象(即称为：原型对象)
+
+      ```javascript
+      function Fn(){}
+      console.log(Fn.prototype)
+      ```
+
+   2. 原型对象有一个属性constructor，他指向函数对象
+
+      ```javascript
+      console.log(Fn.prototype.constructor)  // 输出为fn
+      ```
+
+2. 给原型对象添加属性(一般是方法)
+
+   1. 作用:函数的所有实例对象自动拥有原型中的属性(方法)
+
+      ```javascript
+      Fn.prototype.test=function(){
+          console.log('test')
+      }
+      var fn = new Fn()
+      fn.test()
+      ```
+
+3. 每一个函数都有一个prototype属性`定义函数时自动添加的`，称为显式每一个实力对象有一个__proto__(传教关键对象时自动添加的)，称为隐式原型，隐式原型的值即为其构造函数的显式原型的值
+
+   ```javascript
+   function Fn(){}
+   console.log(Fn.prototype) 
+   var fn = new Fn()
+   console.log(fn.__proto__)
+   console.log(Fn.prototype === fn.__proto__)  // true
+   ```
+
+   #### 原型链
+
+   ![原型链](https://image.coolcustomer.cn/a9b9bd9a-e4d0-42b4-8521-c8b06f864eed )
+
