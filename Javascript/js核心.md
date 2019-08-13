@@ -130,7 +130,7 @@ console.log(num)   =>13
 
 ```javascript
 function fn(){
-    conaole.log(a)  // =>undefined
+    console.log(a)  // =>undefined
     var a=12
     console.log(a)  // =>12
 }
@@ -167,7 +167,7 @@ var x=10,
     y=20;
 function fn(){
     console.log(x,y);  // undefind 20
-    var x=y=100;
+    var x=y=100; // -> var x=100;y=100
     console.log(x,y);  // 100 100
 }
 fn();
@@ -343,10 +343,10 @@ function fn(){
     }
 }
 var f=fn()
-f(10)
-fn()(10)
-f(20)
-fn()(20)
+f(10) // 11
+fn()(10) // 11
+f(20) //22
+fn()(20) //21
 ```
 
 > 先进行的全局的变量提升，然后自上而下代码执行，`var f = fn()`把fn()的返回值赋值给f，因为返回值为函数，执行时开辟内存空间，f执行新开辟的内存空间，因为f占用新开辟的内存空间，因此执行后不会被销毁，
@@ -514,6 +514,107 @@ console.log(num,obj.num)
 
    ![](https://image.coolcustomer.cn/cb3a9b24-d357-4273-a71c-25ac4a02ac47 )
 
+## 面向对象
+
+### 属性类型
+
+#### 数据属性
+
+- [[configurable]]:表示能否通过delete删除属性从而重新定义属性，能否通过修改属性的特性，或者能否把属性修改为访问器属性
+
+  ```javascript
+  // 该属性配置为false之后，便不可以再改为true，否则会报错
+  var object = {}
+  Object.defineProperty(object,'name',{
+  	configurable:false,
+  	writeable:false,
+  	value:'bb'
+  })
+  object.name = 'aa'
+  Object.defineProperty(object,'name',{ // 报错 Cannot redefine property: name
+  	configurable:true,
+  })
+  ```
+
+- [[Enumberable]]:表示能否通过for-in循环返回属性
+- [[Writable]]:能否修改该属性值
+- [[Value]]:属性的数据值，默认为undefined
+
+```javascript
+// 使用ECMAScrite5中的Object.defineProperty()方法，可修改数据属性------单个属性
+var object = {}
+Object.defineProperty(object,'name',{
+	writeable:false,
+	value:'bb
+})
+object.name = 'aa' // 非严格模式下，该操作被忽略,严格模式下，该操作报错,其他数据属性同理
+console.log(object.name) // 'bb'
+// Object.defineProperties() ------多个属性 (IE9+、Firefox 4+、Safari 5+、Opera 12+、Chrome)  
+Object.defineProperties(object,{
+    name:{
+        writable:false
+    },
+    age:{
+        ...
+    }
+})
+```
+
+#### 访问器属性
+
+> 访问器属性不包含数据值，包含getter(读取访问器属性时调用，返回有效的值)和setter函数(写入访问器属性时调用)
+
+- [[configurable]]:表示能否通过delete删除属性从而重新定义属性，能否通过修改属性的特性，或者能否把属性修改为访问器属性
+- [[Enumberable]]:表示能否通过for-in循环返回属性
+- [[get]]:读取属性时调用的函数，默认值为undefined
+- [[set]]:写入属性时调用的函数，默认值为undefined
+
+```javascript
+var object = {
+	_age:10,
+	year:''
+}
+Object.defineProperty(object,'age',{
+	get:function(newvalue){
+		return this._age
+	},
+	set:function(newvalue){
+        if (newvalue <=19) {
+        	this.year = '00后'
+        } else {
+        	this.year = '90后'
+        }
+	}
+})
+object.age = 20
+console.log(object.year)
+```
+
+#### 读取属性的特性
+
+> Object.getOwnPropertyDescriptor()
+
+```javascript
+Object.getOwnPropertyDescriptor(Object,'prototype')
+// configurable: false
+// enumerable: false
+// value: {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+// writable: false
+```
+
+#### 构造函数模式
+
+> var Person = function(){}
+>
+> var person = new Person()
+
+使用new创建实例，会经历一下4步
+
+1. 创建一个新的对象
+2. 构造函数的作用域赋值给新对象(this指向这个新对象)
+3. 执行构造函数中的代码
+4. 返回这个新对象
+
 ### 单例模式
 
 我们把对象数据类型实现`把描述同一件事务的属性或者特征归纳汇总在一起，以此来避免全局变量的冲突问题`的方式和思想就是`单例设计模式`
@@ -530,95 +631,11 @@ var name = '李四'
 
 > 对象数据类型：把描述同一件事务的特征或者属性，进行汇总（放在一起），以此来避免全局变量之间的冲突
 
-#### 使用单例模式实现模块化开发
-
-> 在当前的命名空间下调取其他命名空间的方法，指定好对应的命名空间名字即可，使用[nameSpace].[property]
-
-```javascript
-// 项目组长:公共模块
-var utils = {
-    
-}
-// 张三:搜索
-var searchModel = {
-    submit:function(){}
-}
-// 李四:天气
-var weatherModel = {
-    setWeather:function(){
-        // 调取其他命名空间方法
-        searchModel.sublmit()
-        // 调取自己的方法
-        this.getWeather()
-    },
-    getWeather:function(){}
-}
-```
-
-#### 高级单例模式
-
-> 基于Js高阶编程技巧`惰性思想`来实现单例模式,并且可以把一些常用的设计模式(`命令模式`,`发布订阅模式`,`promise模式`)融合进来，最后清晰的规划我们的业务逻辑代码，方便二次的开发和维护，这种设计思想综合体就是高级单例模式，也是项目中最常应用的
-
-```javascript
-var searchModel = (function(){
-    function submit(){
-        ...
-    }
-    return {
-        submit:submit
-    }
-})()
-searchModel:submit
-```
-
-#### 面向对象(OOP)
-
-> 对象：万物皆对象
->
-> 类：对象的具体细分
->
-> 实例：某一类中具体的事物 
-
-##### JS中常用的内置类
-
-- 关于数据类型
-
-  - Number  每一个数字或者NaN都是他的一个实例
-  - String：字符串类
-  - Boolean：布尔
-  - Null
-  - Undefined(浏览器屏蔽了我们操作Null或者Undefined这个类) 
-  - Object:对象类，每一个对象类型都是他的实例
-    - Array 数组类
-    - RegExp 正则类
-    - Date  日期类
-    - ...
-  - function：函数类，每一个函数都是他的一个实例
-
-- 元素对象和元素集合
-
-  - HTMLCollection:元素集合类
-
-    ```javascript
-    getElementsByTagName
-    getElementsByClassName
-    querySelectorAll
-    ```
-
-  - NodeList:节点集合类
-
-    ```javascript
-    getElementsByName
-    childNodes
-    ```
-
-
-
 ### 原型与原型链
 
 #### 原型
 
-1. 函数中的prototype属性
+1. 函数中的prototype属性,是一个指针，指向一个对象(Object空对象)
 
    1. 每一个函数都有一个prototype属性，他默认指向一个object空对象(即称为：原型对象)
 
@@ -631,6 +648,15 @@ searchModel:submit
 
       ```javascript
       console.log(Fn.prototype.constructor)  // 输出为fn
+      ```
+
+   3. 通过isPrototypeOf()来确定实例与原型对象之间的关系
+
+      ```javascript
+      function Fn(){}
+      let fn = new Fn()
+      Fn.prototype.isPrototypeOf(fn) // true
+      Object.getPrototypeOf(fn) == Fn.prototype // true
       ```
 
 2. 给原型对象添加属性(一般是方法)
@@ -655,7 +681,135 @@ searchModel:submit
    console.log(Fn.prototype === fn.__proto__)  // true
    ```
 
-   #### 原型链
+4. 通过hasOwnPrototype()判断某一属性是存在于实例还是原型
 
-   ![原型链](https://image.coolcustomer.cn/a9b9bd9a-e4d0-42b4-8521-c8b06f864eed )
+   > 返回值为true->属性存在于实例，false->属性存在于原型
+
+   ```javascript
+   var descriptor = Object.getOwnPropertyDescriptor(Object,'prototype')
+   function Fn(){
+   	
+   }
+   Fn.prototype.name = 'aa'
+   let fn = new Fn()
+   fn.name = 'bb'
+   console.log(fn.hasOwnProperty('name'))  // true
+   ```
+
+   原型的动态性
+
+   > 在原型查找值的过程是一次搜索，因此我们对原型对象所做的任何修改(重写除外)能够立即从实际上反应出来，即使是先创建了实例，后修改原型
+   >
+   > ```javascript
+   > function Fn(){}
+   > var fn=new Fn()
+   > Fn.prototype.name = 'aa'
+   > console.log(fn.name)
+   > ```
+   > 应用
+   >
+   > ```javascript
+   > // 只需要在初始化构造函数的时候为其添加方法，不必要每次添加
+   > function Fn(){
+   > 	this.name= 'aa'
+   > 	if (!(this.say instanceof Function)){
+   > 		alert('first')
+   > 		Fn.prototype.say=function(){
+   > 			alert(this.name)
+   > 		}
+   > 	}
+   > }
+   > var fn1 = new Fn()
+   > var fn2 = new Fn()
+   > fn2.name='bb'
+   > fn1.say() // first aa
+   > fn2.say() // bb
+   > ```
+##### 原型与In操作符
+###### in的用法
+
+   - for-in循环
+
+     > 访问所有能通过对象访问的，可枚举的属性,既包括实例也包括原型
+
+     ```javascript
+     var obj = new Object()
+     Object.prototype.age = 12
+     obj.name = 'aa'
+     for (var item in obj){
+     	console.log(item) // name age
+     }
+     ```
+
+     
+
+   - 单独使用in，可通过对象访问到给定的属性时返回true，不论属性在原型还是实例(原型链查找机制)
+
+     ```javascript
+     function Fn(){
+         name:'a'
+     }
+     var fn = new Fn()
+     fn.name = 'bb'
+     console.log('name' in fn) //true
+     console.log('name' in Fn) //true
+     
+     //与hasOwnprototype配合判断属性存在于对象还是原型
+     function hasPrototypeProperty(object,name){
+     	return !object.hasOwnProperty(name) && (name in object)
+     }
+     hasPrototypeProperty(fn,'name') // false
+     ```
+
+
+##### 原型的问题：
+
+- 构造函数无法传参
+
+- 原型中属性值为引用类型是，实例一改全改(多个实例的__proto__指向同一个地址)
+
+  ```javascript
+  function Fn(){
+      friends:['a','b']
+  }
+  Fn.prototype={
+      constructor:Fn,
+      name:'aa',
+  }
+  var fn1 = new Fn()
+  var fn2 = new Fn()
+  fn1.friends.push('c')
+  console.log(fn1.friends) //[a,b,c]
+  console.log(fn2.friends) // [a,b,c]
+  
+  //解决方法:将引用类型的值放入构造函数中
+  function Fn(){
+      this.friends=['a','b']
+  }
+  Fn.prototype={
+      constructor:Fn,
+      name:'aa',
+  }
+  var fn1 = new Fn()
+  var fn2 = new Fn()
+  fn1.friends.push('c')
+  console.log(fn1.friends) //[a,b,c]
+  console.log(fn2.friends) // [a,b]
+  ```
+
+  
+
+
+
+
+
+#### 原型链
+
+访问一个对象属性时，访问的路径：
+
+1. 现在自身属性中查找，找到返回
+2. 如果没有，再沿着__proto__这条链线上查找，找到返回
+3. 如果没又找到，返回undefinde(Object.prototype.__proto__为null)
+
+![原型链](https://image.coolcustomer.cn/a9b9bd9a-e4d0-42b4-8521-c8b06f864eed )
 
