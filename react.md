@@ -322,4 +322,181 @@ ReactDOM.render(<Clock />,document.getElementById('root'))
    }))
    ```
 
-   
+
+
+
+### 组件的三大属性
+
+1. props ---  组件外部传入，只读，不可变
+
+2. state --- 组件内部的状态，可变
+
+3. refs----标识组件内的元素
+
+   ```react
+   class Test_ref extends React.Component{
+         constructor(props){
+           super(props)
+           this.show = this.show.bind(this)
+         }
+         show(){
+           alert(this.input.value)
+           return
+           const con = this.refs.content.value
+           if (con === '' || con === null || con === undefined) {
+             alert('暂未填写')
+             return
+           }
+           alert(con)
+         }
+         blur(event){
+           console.log(event.target.value)
+         }
+         render(){
+           return(
+             <div>
+               // react 不建议 旧版本的方法,未摒弃，但是不建议
+               <input type="text" ref="content"></input> &nbsp;&nbsp;&nbsp;
+               // react 建议
+               <input ref={input => this.input = input}></input> // 形参`input`是input元素
+               <input type="button" value="按钮" onClick={this.show.bind(this)}></input>
+               <br/>
+               <input type="text" onBlur={this.blur.bind(this)}></input>
+             </div>
+           )
+         }
+       }
+       ReactDOM.render(<Test_ref/>,document.getElementById('test'))
+   ```
+
+   #### 组件的组合使用
+
+   ```javascript
+   // 主框架
+   class App extends React.Component{
+       constructor(props){
+           super(props)
+           this.state = {
+               todoList:['aaa','bbb','ccc']
+           }
+           this.addTodo = this.addTodo.bind(this) // react函数需要手动绑定this
+       }
+       addTodo(item){
+           const {todoList} = this.state
+           todoList.unshift(item)
+           this.setState({todoList})
+       }
+       render(){
+           const {todoList} = this.state
+           return (
+               <div>
+               <h1>TodoList</h1>
+               <Add count={todoList.length} add={this.addTodo}></Add>
+               <List list={todoList}></List>
+               </div>
+           )
+       }
+   }
+   // todoList
+   class List extends React.Component{
+       render(){
+           const {list} = this.props
+           return(
+               <div>
+               <ul>
+               {list.map((item,index)=>{ return (<li key={index}>{item}</li>) })}
+               </ul>
+               </div>
+           )
+       }
+   }
+   List.propTypes = {
+       list: PropTypes.array.isRequired
+   }
+       // add按钮
+       class Add extends React.Component{
+         addItem(){
+           const value = this.input.value.trim()
+           this.props.add(value)
+           this.input.value = ''
+         }
+         render(){
+           const { count } = this.props
+           return (
+             <div>
+               <input type="text" ref={input => this.input = input}/>
+               <button onClick={this.addItem.bind(this)}>添加 #{count+1}</button>
+             </div>
+           )
+         }
+       }
+       // 声明父组件传入的值，并类型校验  isRequired->该变量是否可以为空
+       Add.propTypes = {
+         count:PropTypes.number.isRequired,
+         add:PropTypes.func.isRequired
+       }
+       ReactDOM.render(<App/>,document.getElementById('test'))
+   ```
+
+   > 组件的propTypes类型
+   >
+   > ![数据类型声明](https://image.coolcustomer.cn/0dbf0f1a-4be9-4b59-929b-0985993f259d )
+
+#### React绑定this的三种方法
+
+> 如果不绑定this指向为undefined
+
+1. 在constructor中绑定
+
+   ```javascript
+   class App extends React.Component{
+       constructor(props){
+           super(props)
+           this.add = this.add.bind(this)
+       }
+       add(){
+           console.log(this)
+       }
+       render(){
+           return (
+           	<div onClick={this.add}></div>
+           )
+       }
+   }
+   ```
+
+2. 调用函数时绑定
+
+   ```javascript
+   class App extends React.Component{
+       constructor(props){
+           super(props)
+       }
+       add(){
+           console.log(this)
+       }
+       render(){
+           return (
+           	<div onClick={this.add.bind(this)}></div>
+           )
+       }
+   }
+   ```
+
+3. 利用箭头函数不改变this指向
+
+   ```javascript
+   class App extends React.Component{
+       constructor(props){
+           super(props)
+       }
+       add(){
+           console.log(this)
+       }
+       render(){
+           return (
+           	<div onClick={()=>this.add()}></div>
+           )
+       }
+   }
+   ```
