@@ -406,10 +406,56 @@ do{
 ## 十一、数学方法：
 
 - Math.pow(x,y)         x的y次幂
+
 - Math.random()       产生0-1的随机数
+
 - Math.floor()             向下取整
+
 - Math.ceil()               向上取整
+
 - Math.round()          四舍五入取整
+
+- Math.sign()    判断一个数的正负
+
+  ```javascript
+  //正数返回+1，负数返回-1,对于无法转换为数值的，返回NaN
+  Math.sign(5)  //+1
+  Math.sign(-5)  //-1
+  Math.sign(NaN)  //NaN
+  ```
+
+- Math.trunc()   去除一个数的小数部分
+
+  ```javascript
+  // 内部对数值进行转化，无法转化的返回NaN
+  Math.trunc = Math.trunc || function trunc(number){
+      if (number>0){
+          number=number.floor()
+      }
+      else {
+          number = number.ceil()
+      }
+  }
+  ```
+
+- Math.cbrt(x)   计算x的立方根
+
+  ```javascript
+  // 先使用Number()，进行数值的转化
+  Math.cbrt() = Math.cbrt() || function cbrt(x){
+      let y = Math.pow(Math.abs(x),1/3)
+      return x>0?y:-y
+  }
+  ```
+
+- Math.hypot(x,y,z)    计算所有参数的平方和的平方根
+
+  ```javascript
+  // 内部对参数进行转化，不能转化的返回NaN
+  Math.hypot(3,4)  // 5
+  ```
+
+  
 
 ## 十二、数组：
 
@@ -501,6 +547,10 @@ variable()
 > 用字面量声明的函数必须要先声明后调用，用关键字function声明的函数，可以在声明前也可以在声明后（预解析）。
 
 - 对象的方式
+
+```javascript
+var fun = new Function()
+```
 
 
 
@@ -750,18 +800,21 @@ for(let i in apple){
 ### 查找下标
 
 ```js
-	str.indexOf()     //从前往后查找对应字符的下标。如果有返回下标，如果没有返回-1
-    str.lastIndexOf()  //从后往前查找对应字符的下标。如果有返回下标，如果没有返回-1
-    str.search()   //查找对应字符的下标。如果有返回下标，如果没有返回-1   可以使用正则·
-    str.match()   //返回一个数组，  所查的字   下标    所在数组      如果没有返回null
+str.indexOf()     //从前往后查找对应字符的下标。如果有返回下标，如果没有返回-1
+str.lastIndexOf()  //从后往前查找对应字符的下标。如果有返回下标，如果没有返回-1
+str.search()   //查找对应字符的下标。如果有返回下标，如果没有返回-1   可以使用正则·
+str.match()   //返回一个数组，  所查的字   下标    所在数组      如果没有返回null
+str.includes('aa') // 字符串是否包含aa，有返回true，没有返回false  -> es6
+str.startsWith('aa') // 字符串是否是以aa开头   -> es6
+str.endsWith('aa') // 字符串是否是以aa开头   -> es6
 ```
 
 ### 字符串的截取
 
 ```js
-    str.substr("star,[length]")     //从star开始截取，长度为length
-    str.substring("star,end")     //从star开始截取，到end结束，不会截取到end
-    str.slice(star,end)   //从star开始截取，到end结束，不会截取到end
+str.substr("star,[length]")     //从star开始截取，长度为length
+str.substring("star,end")     //从star开始截取，到end结束，不会截取到end
+str.slice(star,end)   //从star开始截取，到end结束，不会截取到end
 ```
 
 ### 字符串大小写转换
@@ -1148,10 +1201,10 @@ let now=new Date()
 now.getFullYear()  //获取当前年份
 now.getMonth()  //获取当前月份
 now.getDate()  //获取当前日期
-now.getHours()  //设置小时
-now.getMinutes()  //设置分钟
-now.getSeconds()  //设置秒数
-now.getMillliseconds()  //设置毫秒
+now.getHours()  //获取小时
+now.getMinutes()  //获取分钟
+now.getSeconds()  //获取秒数
+now.getMillliseconds()  //获取毫秒
 now.getTime()    //当前时间到1970年1月1日00:00
 ```
 

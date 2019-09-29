@@ -490,7 +490,7 @@ ReactDOM.render(<Clock />,document.getElementById('root'))
        constructor(props){
            super(props)
        }
-       add(){
+       add =()=>{
            console.log(this)
        }
        render(){
@@ -499,4 +499,38 @@ ReactDOM.render(<Clock />,document.getElementById('root'))
            )
        }
    }
+   
+   
+   class App extends React.Component{
+       constructor(props){
+           super(props)
+       }
+       add(){
+           console.log(this)
+       }
+       render(){
+           return (
+           	<div onClick={this.add}></div>
+           )
+       }
+   }
    ```
+
+### 组件分类:
+
+#### 受控组件
+
+> 表单项输入时能自动收集成状态
+
+#### 非受控组件
+
+> 需要时才手动读取表单输入框的内容  ---> 隐式操作DOM
+
+### Redux
+
+- [中文文档](https://www.redux.org.cn)
+
+- [英文文档](https://redux.js.org/)
+
+- [Github](https://github.com/reactjs/redux)
+

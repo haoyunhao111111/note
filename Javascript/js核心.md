@@ -39,7 +39,6 @@ function aa(){
     return eval(aa.join('+'));
 }
 ```
-
 ##### 函数的操作
 
 1. 创建函数
@@ -98,7 +97,7 @@ o=null    //null空对象指针(不指向任何堆内存)，此时上一次的�
 
 > 在`当前作用域`中，js代码自上而下执行之前，浏览器会把所有带`var,function`关键字的进行提前`声明或者定义`
 
-- 声明(declare)：var num  在当前作用域中吼一嗓子我有num这个名了
+- 声明(declare)：var num  在当前作用域中声明我有num这个名了
 - 定义(defined)：num=12  把声明的名字赋一个值
 - 带var关键字的只是提前声明一下，带function关键字的在变量提升阶段把声明和定义都完成了
 
@@ -575,7 +574,7 @@ var object = {
 	year:''
 }
 Object.defineProperty(object,'age',{
-	get:function(newvalue){
+	get:function(){
 		return this._age
 	},
 	set:function(newvalue){
@@ -647,7 +646,7 @@ var name = '李四'
    2. 原型对象有一个属性constructor，他指向函数对象
 
       ```javascript
-      console.log(Fn.prototype.constructor)  // 输出为fn
+      console.log(Fn.prototype.constructor)  // 输出为Fn
       ```
 
    3. 通过isPrototypeOf()来确定实例与原型对象之间的关系
@@ -769,18 +768,13 @@ var name = '李四'
 - 原型中属性值为引用类型是，实例一改全改(多个实例的__proto__指向同一个地址)
 
   ```javascript
-  function Fn(){
-      friends:['a','b']
-  }
-  Fn.prototype={
-      constructor:Fn,
-      name:'aa',
-  }
-  var fn1 = new Fn()
-  var fn2 = new Fn()
-  fn1.friends.push('c')
-  console.log(fn1.friends) //[a,b,c]
-  console.log(fn2.friends) // [a,b,c]
+  function Fn(){}
+  Fn.prototype.friends=['a','b','c']
+  let fn1 = new Fn()
+  let fn2 = new Fn()
+  fn1.friends.push('d')
+  console.log(fn1.friends) // ['a','b','c','d']
+  console.log(fn2.friends) // ['a','b','c','d']
   
   //解决方法:将引用类型的值放入构造函数中
   function Fn(){
@@ -796,11 +790,6 @@ var name = '李四'
   console.log(fn1.friends) //[a,b,c]
   console.log(fn2.friends) // [a,b]
   ```
-
-  
-
-
-
 
 
 #### 原型链

@@ -253,6 +253,8 @@
   </script>
 ```
 
+
+
 ## axios
 
 ```javascript
@@ -348,6 +350,8 @@ p.then((res)=>{console.log(res)},()=>{})
 
 ## 指令
 
+### 常用的内部指令
+
 > dom元素的行间属性，vue提供了内置的指令，必须以v-开头，后面的值均为变量
 
 - v-model  只能用于表单，会忽略掉value,checked,selected,将数据绑定到视图上，数据修改后会影响视图的变化
@@ -359,73 +363,216 @@ p.then((res)=>{console.log(res)},()=>{})
 
 > 如果频繁的切换dom，用v-show更好，如果一开始数据就能确认下来，用v-if更好
 
+### 自定义指令(Vue.directive())
+
+#### 用法
+
+```javascript
+<template>
+  <div>
+    <div v-hyh="color">{{num}}</div>
+    <div>
+      <button @click="add">add</button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from 'vue'
+Vue.directive('hyh', function (el, binding) { 
+  /*
+  el: 自定义指令的dom
+  binding:{
+  	name:'hyh',   自定义的指令名
+  	value:'red',  自定义指令绑定的data值
+  	expression:'color'  自定义指令绑定的变量
+  }
+  */
+  el.style = 'color:' + binding.value
+})
+export default {
+  data () {
+    return {
+      num: 10,
+      color: 'red'
+    }
+  },
+  methods: {
+    add () {
+      this.num++
+    }
+  }
+}
+</script>
+<style lang="less" scoped></style>
+```
+
+#### 生命周期
+
+- bind:只调用一次，指令第一次绑定到元素时调用，用这个钩子函数可以定义一个绑定时执行一次的初始化动作。
+- inserted:被绑定元素插入父节点时调用（父节点存在即可调用，不必存在于document中）。
+- update:被绑定于元素所在的模板更新时调用，而无论绑定值是否变化。通过比较更新前后的绑定值，可以忽略不必要的模板更新。
+- componentUpdated:被绑定元素所在模板完成一次更新周期时调用。
+- unbind:只调用一次，指令与元素解绑时调用。
+
+```javascript
+Vue.directive('hyh', {
+    bind:function(){//被绑定
+     console.log('1 - bind');
+     el.style = 'color:' + binding.value
+    },
+    inserted:function(){//绑定到节点
+        console.log('2 - inserted');
+    },
+    update:function(){//组件更新
+        console.log('3 - update');
+    },
+    componentUpdated:function(){//组件更新完成
+        console.log('4 - componentUpdated');
+    },
+    unbind:function(){//解绑
+        console.log('1 - bind');
+    }
+})
+```
+
 ## 路由
 
 ## 状态
 
 ## 组件化开发
 
-> 完整的数据，逻辑，组件
+### 父组件->子组件
 
-```vue
+> props：在组件中，用props来定义父组件传递的值
+
+- 简单写法->不建议
+
+  ```javascript
+  props:['name','age']
+  ```
+
+- 对象写法：
+
+  ```javascript
+  props:{
+  	name:{
+  		type:String,
+  		required:true,  // 是否是必传, true->父组件不传会报错
+  		default:'张三', // 默认值->基本数据类型
+  	}
+  	hoppy:{
+  		type:Array,
+  		required:true,  // 是否是必传, true->父组件不传会报错
+  		default:function(){   // 如果默认值是对象或者数组，必须从工厂函数中获取
+  			return ['aa','bb']
+  		}
+  	}
+  }
+  ```
+
+### 子组件->父组件
+
+>  $emit：自定义事件
+
+- 在子组件中，通过$emit()来触发事件。 
+- 在父组件中，通过v-on来监听子组件事件 。
+
+### 父子组件的访问方式
+
+- $children
+
+  > 获取到父组件页面中所有的子组件，以列表形式，当子组件过多时，往往不能确定它的索引值，甚至还可能会发生变化。 
+
+  ```javascript
+  // 子组件
+  <div id='app'>
+      <div>
+      	<cpn></cpn>
+          <cpn></cpn>
+          <cpn></cpn>
+          <cpn></cpn>
+  	</div>
+  </div>
+  // 父组件
+  mounted(){
+      console.log(this.$children)
+  }
+  
+  ```
+
+- $refs
+
+  > $refs和ref指令通常是一起使用的。 ref类似于一个特定的id，$refs返回值为object
+
+  ```javascript
+  // 子组件
+  <div id='app'>
+      <div>
+  		<cpn ref="first"></cpn>
+  		<cpn ref="second"></cpn>
+  		<cpn></cpn>
+  		<cpn></cpn>
+  	</div>
+  </div>
+  // 父组件
+  mounted(){
+  	console.log(this.$refs.first)
+  }
+  ```
+
+
+### 插槽
+
+> 组件的插槽也是为了让我们封装的组件更加具有扩展性 
+
+#### 具名插槽
+
+```javascript
 // 子组件
-<template>
-  <div class="home">
-    <li>
-      <input type="checkbox" v-model="check">
-      <slot name='item' v-bind="{check}"></slot>  // v-bind="{check}" 向父组件传值
-    </li>
-  </div>
-</template>
-
-<script>
-export default {
-  props: {
-    item: {
-      type: String
-    }
-  },
-  data () {
-    return ({
-      check: false
-    })
-  }
-}
-</script>
-// 父组件
-<template>
-  <div id="app">
-    <input type="text" name="" id="" v-model='con'>
-    <button @click='add'>添加</button>
-    <my-slot v-for='item in list' :key='item'> // 每一个item都拥有一份独立的 data , 这也是data是一个函数而不是对象的原因
-      <template v-slot:item='item1'> // v-slot:item='item1' 接收子组件传递的值，是一个对象
-        <span slot="item" :style='{color:item1.check?"red":"blue"}'>{{item}}</span>
-      </template>
-    </my-slot>
-  </div>
-</template>
-<script>
-import mySlot from './views/slot.vue' // 引入子组件
-export default {
-  name: 'app',
-  components: {
-    mySlot // 注册组件
-  },
-  data () {
-    return ({
-      con: '',
-      list: []
-    })
-  },
-  methods: {
-    add () {
-      this.list.push(this.con)
-      this.con = ''
-    }
-  }
-}
-</script>
+<div>
+	<slot name="left">
+		<div>默认插槽</div>
+	</slot>
+	<slot name="right"></slot>
+</div>
+//父组件
+<div id='app'>
+	<cpn>
+		<div slot="left">左插槽</div>
+		<div slot="right">右插槽</div>
+	</cpn>
+	<span>----------</span>
+	<cpn></cpn>
+</div>
 ```
+
+#### 作用域插槽
+
+```javascript
+//子组件
+<template id="cpn">
+	<div>
+		<slot :data="list"></slot>
+	</div>
+</template>
+// 父组件
+<div id='app'>
+	<cpn>
+		<template slot-scope="scope">
+			<ul>
+				<li v-for="item in scope.data">{{item}}</li>
+			</ul>
+		</template>
+	</cpn>
+	<cpn>
+		<template slot-scope="aaa">
+			<span v-for="item in aaa.data">{{item}}--</span>
+		</template>
+	</cpn>
+</div>
+```
+
+
 
 
 
