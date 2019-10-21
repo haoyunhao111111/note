@@ -802,3 +802,72 @@ var name = '李四'
 
 ![原型链](https://image.coolcustomer.cn/a9b9bd9a-e4d0-42b4-8521-c8b06f864eed )
 
+## promise
+
+> Promise是异步编程的一种解决方案
+
+```javascript
+new Promise((resolve,reject)=>{
+	setTimeout(()=>{
+		resolve('第一次访问成功,进行第二次访问')
+	},1000)
+})
+.then(res => {
+	console.log(res)
+	return new Promise((resolve,reject) => {
+		setTimeout(()=>{
+			reject('第二次访问成功')
+		},1000)
+	})
+	.then(data =>{
+		console.log(data)
+	})
+	.catch(()=>{
+		console.log('第二次访问失败')
+	})
+
+})
+.catch(()=>{
+	console.log('第一次访问失败')
+})
+
+// 若第二次没有进行网络请求，上面可简写为
+new Promise((resolve,reject)=>{
+	setTimeout(()=>{
+		resolve('第一次访问成功,进行第二次访问')
+	},1000)
+})
+.then(res => {
+	console.log(res)
+	return Promise.resolve('第二次访问成功')
+	.then((res)=>{
+         console.log(res)
+	})
+})
+.catch(()=>{
+	console.log('第一次访问失败')
+})
+```
+
+### promise.all
+
+> 一个需求需要访问两个级以上接口
+
+```javascript
+Promise.all([   // Promise.all接收一个数组，数组内存放要进行的网络请求
+    new Promise((resolve,reject)=>{
+    	setTimeout(()=>{
+    		resolve('第一次访问成功')
+    	},1000)
+    }),
+    new Promise((resolve,reject)=>{
+    	setTimeout(()=>{
+    		resolve('第二次访问成功')
+    	},1000)
+    })
+// 得到的res为一个数组，将多个网络请求的成功结果存放，只要有一个请求失败，不会调用then，会直接调用catch，
+]).then(res => {  
+	console.log(res)
+})
+```
+

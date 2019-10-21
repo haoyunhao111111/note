@@ -435,10 +435,6 @@ Vue.directive('hyh', {
 })
 ```
 
-## 路由
-
-## 状态
-
 ## 组件化开发
 
 ### 父组件->子组件
@@ -571,18 +567,6 @@ Vue.directive('hyh', {
 	</cpn>
 </div>
 ```
-
-
-
-
-
-## localStorage
-
-localStorage.setITem("aa","bb")    存入
-
-locolStorage.removeItem("aa")     删除
-
-locolStorage.clear    清空
 
 ## 生命周期函数
 
@@ -737,3 +721,236 @@ locolStorage.clear    清空
 - destroyed
 
 > 当执行到destroyed函数的时候，组件已经被完全销毁了，此时组件中的data,methods等等都已经不可用了 
+
+## 路由(vue-router)
+
+### 发展阶段
+
+1. 后端路由->后端渲染
+
+   > 当我们页面中需要请求不同的路径内容时, 交给服务器来进行处理, 服务器渲染好整个页面, 并且将页面返回给客户
+
+   缺点：
+
+   1. 一种情况是整个页面的模块由后端人员来编写和维护的. 
+   2. 另一种情况是前端开发人员如果要开发页面, 需要通过PHP和Java等语言来编写页面代码. 
+   3. 而且通常情况下HTML代码和数据以及对应的逻辑会混在一起 
+
+2. 前后端分离->前端渲染
+
+   > 后端只提供API来返回数据, 前端通过Ajax获取数据, 并且可以通过JavaScript将数据渲染到页面中
+
+   优点：
+
+   1. 前后端责任的清晰, 后端专注于数据上, 前端专注于交互和可视化上
+
+3. 单页面富应用阶段(SPA：Single page Web application)
+
+   > 在前后端分离的基础上加了一层前端路由 
+
+### vue-router
+
+> npm install vue-router --save
+
+```javascript
+// router/index.js
+
+// 配制路由相关信息
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+// 通过Vue.use(插件)，安装插件 
+Vue.use(VueRouter)
+
+// 创建VueRouter实例
+const routes = [
+    {
+    path: '',
+    redirect: '/home' // 重定向路径
+  },
+  {
+    path: '/home',
+    component: Home
+  },
+  {
+    path: '/about',
+    component: About
+  }
+] // 配置路由和组件的映射关系
+const router = new VueRouter({
+  routes
+})
+// 将router传入到vue实例
+export default router
+
+// main.js
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  render: h => h(App)
+})
+
+```
+
+#### router-link
+
+> 组件支持用户在具有路由功能的应用中 (点击) 导航 
+
+- to -> 跳转路由
+- replace -> 启用history.replaceState
+- tag -> 生成一个别的标签
+- active-class -> 当导航处于活跃状态的class,可在`router/index.js`下统一配置
+
+```vue
+<router-link to="about" tag="button" replace>关于</router-link>
+<router-link to="home" tag="button" replace>首页</router-link>
+```
+
+#### 路由懒加载
+
+> 当打包构建应用时，Javascript 包会变得非常大，影响页面加载 ，路由懒加载的主要作用就是将路由对应的组件打包成一个个的js代码块。
+
+##### 懒加载的方式
+
+> 引入组件时以函数的方式引入
+
+```javascript
+{
+  path: '/about',
+  component: () => import('../components/about'),
+  meta: {
+    title: '关于'
+  }
+}
+```
+
+#### 嵌套路由
+
+> 一个路径映射一个组件, 访问这两个路径也会分别渲染两个组件 
+
+```javascript
+// router/index.js
+{
+  path: '/home',
+  component: () => import('../components/home'),
+  children: [
+    {    // 默认路径
+      path:'/home',
+      redirect:'news'
+    },
+    {
+      path: 'news',
+      component: () => import('../components/news')
+    },
+    {
+      path: 'message',
+      component: () => import('../components/message')
+    }
+  ],
+  meta: {
+    title: '首页'
+  }
+},
+// home.vue
+<div>
+    <h2>我是home</h2>
+    <router-link to="/home/news">新闻</router-link>
+    <router-link to="/home/message">消息</router-link>
+    <router-view></router-view>
+</div>
+```
+
+#### 组件传参
+
+1. params
+   1. 配置路由格式: /router/:id 
+   2. 传递的方式: 在path后面跟上对应的值 
+   3. 传递后形成的路径: /router/123, /router/abc
+   4. 获取数据:this.$route.params.id
+2. query
+   1. 配置路由格式: /router, 也就是普通配置 
+   2. 传递的方式: 对象中使用query的key作为传递方式 
+   3. 传递后形成的路径: /router?id=123, /router?id=abc 
+   4. 获取数据:this.$route.query.id
+
+#### 路由守卫
+
+> vue-router提供的导航守卫主要用来监听监听路由的进入和离开的
+
+[官方文档](<https://router.vuejs.org/zh/guide/advanced/navigation-guards.html> )
+
+- 全局前置守卫(router.beforeEach(to,from,next))
+
+  - to: 即将要进入的目标路由对象
+  - from:当前导航正要离开的路由
+  - next:一定要调用该方法来 resolve这个钩子。执行效果依赖 `next` 方法的调用参数 
+    - next() -> 进行管道中的下一个钩子，跳转路由
+    - next(false)  ->中断路由
+    - next('/')  ->next传入一个路由，表示跳转到该路由
+
+  ```javascript
+  router.beforeEach((to, from, next) => {
+    document.title = to.matched[0].meta.title
+    next()
+  })
+  ```
+
+- 全局后置钩子(router.afterEach(to,from))  ->  不会接受next函数，也不会改变导航本身
+
+- 组件内路由守卫
+
+  ```javascript
+  new Vue({
+      data(){
+          return {}
+      },
+      methods:{},
+      beforeRouteEnter (to, from, next) {
+          // 在渲染该组件的对应路由被 confirm 前调用
+          // 不！能！获取组件实例 `this`
+          // 因为当守卫执行前，组件实例还没被创建
+      },
+      beforeRouteUpdate (to, from, next) {
+          // 在当前路由改变，但是该组件被复用时调用
+          // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+          // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+          // 可以访问组件实例 `this`
+      },
+      beforeRouteLeave (to, from, next) {
+          // 导航离开该组件的对应路由时调用
+          // 可以访问组件实例 `this`
+      }
+  })
+  ```
+
+##### 路由守卫流程解析
+
+1. 导航被触发。
+2. 在失活的组件里调用离开守卫。
+3. 调用全局的 `beforeEach` 守卫。
+4. 在重用的组件里调用 `beforeRouteUpdate` 守卫 (2.2+)。
+5. 在路由配置里调用 `beforeEnter`。
+6. 解析异步路由组件。
+7. 在被激活的组件里调用 `beforeRouteEnter`。
+8. 调用全局的 `beforeResolve` 守卫 (2.5+)。
+9. 导航被确认。
+10. 调用全局的 `afterEach` 钩子。
+11. 触发 DOM 更新。
+12. 用创建好的实例调用 `beforeRouteEnter` 守卫中传给 `next` 的回调函数。
+
+#### keep-alive
+
+>  keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染。
+>
+> 它们有两个非常重要的属性: 
+>
+> - include - 字符串或正则表达，只有匹配的组件会被缓存 
+> - exclude - 字符串或正则表达式，任何匹配的组件都不会被缓存 
+
+## 状态(vuex)
