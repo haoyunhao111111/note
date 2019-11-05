@@ -258,6 +258,14 @@
 ## axios
 
 ```javascript
+// 默认配置
+axios.defaults.baseUrl = ''
+axios.defaults.timeout = 5000 // 请求时间，超时报错
+```
+
+
+
+```javascript
 axios.get('/app/sdfkof',{})
     .then(function(res){
     	console.log(res)
@@ -436,6 +444,13 @@ Vue.directive('hyh', {
 ```
 
 ## 组件化开发
+
+### 脚手架安装
+
+```javascript
+vue-cli2   vue init webpack my-project
+vue-cli3   vue create my-project
+```
 
 ### 父组件->子组件
 
@@ -954,3 +969,98 @@ new Vue({
 > - exclude - 字符串或正则表达式，任何匹配的组件都不会被缓存 
 
 ## 状态(vuex)
+
+> 状态的集中处理，存储多个页面都需要的状态
+
+### Vuex核心概念
+
+#### state
+
+  > vuex提出单一状态树(Single Source of Truth)概念,所有的状态放在一个store中，不要有多个store
+
+#### getters
+
+  >类似于computed中的get方法
+
+  ```javascript
+getters: {
+    // 基本用法：第一个参数是state
+    moreTo20 (state) {
+      return state.student.filter(item => item.age > 20)
+    },
+    // 调用getters内其他方法：第二个参数是getters
+    moreTo20length (state, getters) {
+      return getters.moreTo20.length
+    },
+    // 根据外部传入的参数处理:getters中的方法只能接受两个参数(state,getters),如果外部传参，只能返回函数来处理
+    moreToAge (state) {
+      return function (age) {
+        return state.student.filter(item => item.age > age)
+      }
+    }
+  },
+  ```
+
+#### mutation
+
+> vuex提供的唯一的更新state的方式：提交mutation
+>
+> 里面的方法必须是同步的
+
+- 普通方式
+
+  ```javascript
+  // store/index.js
+  mutations: {
+    increment (state,payload) {
+       console.log(payload)
+    }
+  },
+  // 页面
+  this.$store.commit('increment' ,{ name: '张三', age: 10 })
+  ```
+
+- 带type属性的对象
+
+  ```javascript
+  // store/index.js
+  mutations: {
+    increment (state,payload) {
+       console.log(payload)
+    }
+  },
+  // 页面
+      this.$store.commit({
+          type:'increment',
+          info:{ name: '张三', age: 10 }
+      })
+  ```
+
+##### mutation响应规则
+
+- 提前在store中初始化好所需的属性
+- vue.set(object,key,value)
+- vue.delete(object,key)
+
+#### action
+
+> 处理异步的请求
+
+```javascript
+// store/index.js
+actions: {
+    increment (context) {  // context:执行上下文，相当于$store
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                context.commit(INCREMENT)
+                resolve('action处理完成')
+            }, 1000)
+        })
+    }
+},
+// 页面 -> 调用actions用dispatch
+this.$store.dispatch('increment').then(res => {
+    console.log(res)
+})
+```
+
