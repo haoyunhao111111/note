@@ -627,7 +627,45 @@ export default (state = defaultState,action)=>{  //就是一个方法函数
 #### 三个坑
 
 1. store必须是唯一的
+
 2. reducer中只能接受state,不能更改state
+
 3. reducer必须是一个纯函数
 
-​      
+#### thunk中间件
+
+> 因为reducer必须是一个纯函数，所以网络请求不能放在reducer中，thunk可以使网络请求发生在reducer中
+
+##### 配置
+
+```javascript
+// store/index.js
+import {createStore,applyMiddleware,compose} from 'redux'
+import thunk from 'redux-thunk'
+import reducer from './reducer'
+const compostEnHancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}):compose  // 增强函数
+const enhancer = compostEnHancers(applyMiddleware(thunk))
+const store = createStore(reducer,enhancer)
+export default store
+```
+
+##### 使用
+
+```javascript
+// createActions.js
+export const getListAction = (data) => ({
+  type:GET_LIST,
+  data
+})
+export const getList = () => {
+  return (dispatch) => {
+    axios.get('/oms/channel/getAllChannel').then((res)=>{
+      const data = res.data
+      const action = getListAction(data)
+      dispatch(action)
+    })
+  }
+}
+```
+
