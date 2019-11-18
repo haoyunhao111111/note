@@ -29,7 +29,7 @@ ReactDOM.render(
 
 #### 属性
 
-> SX 的特性更接近 JavaScript 而不是 HTML , 所以 React DOM 使用 `camelCase` 小驼峰命名 来定义属性的名称，而不是使用 HTML 的属性名称。
+> JSX 的特性更接近 JavaScript 而不是 HTML , 所以 React DOM 使用 `camelCase` 小驼峰命名 来定义属性的名称，而不是使用 HTML 的属性名称。
 >
 > 例如，`class` 变成了 `className`，而 `tabindex` 则对应着 `tabIndex`
 
@@ -37,14 +37,6 @@ ReactDOM.render(
 const element = <div className = 'test'>test</div>
 // css文件
 // .test{color:red;}
-```
-
-#### 防注入
-
-```react
-const title = response.potentiallyMaliciousInput;
-// 直接使用是安全的：
-const element = <h1>{title}</h1>;
 ```
 
 #### jsx代表Object
@@ -258,7 +250,9 @@ class Clock extends React.Component{
    )
    ```
 
-##### 生命周期方法
+#### 生命周期方法
+
+![](https://img2018.cnblogs.com/blog/331769/201903/331769-20190314070341633-1595341780.png )
 
    - `componentDidMount()` 方法会在组件已经被渲染到 DOM 中后运行 
    - `ComponentWillUnmount()`在组件被卸载和销毁之前立即调用。在此方法中执行任何必要的清理，例如使计时器无效、取消网络请求或清除在*组件* 
@@ -528,9 +522,112 @@ ReactDOM.render(<Clock />,document.getElementById('root'))
 
 ### Redux
 
+![](https://jspang.com/images/redux_flow.png )
+
 - [中文文档](https://www.redux.org.cn)
-
 - [英文文档](https://redux.js.org/)
-
 - [Github](https://github.com/reactjs/redux)
 
+#### 安装redux
+
+```
+npm install redux --save
+```
+
+#### 目录结构
+
+- src
+  - store
+    - index.js
+    - reducer.js
+
+```javascript
+// index.js
+import { createStore } from 'redux'  //  引入createStore方法
+import reducer from './reducer'    
+const store = createStore(reducer) // 创建数据存储仓库
+export default store   //暴露出去
+
+
+// reducer.js
+const defaultState = {}  //默认数据
+export default (state = defaultState,action)=>{  //就是一个方法函数
+    return state
+}
+```
+
+
+
+1. 页面使用store
+
+   ```javascript
+   constructor(props){
+       super(props)
+        this.state = store.getState()   // getState() -> 获取reducer中的state
+     }
+   ```
+
+2. 通过action更改store
+
+   1. 定义action
+
+      ```javascript
+      function changeInput(){
+          const action = {
+              type:'changeInput',
+              value:'aaa'
+          }
+      }
+      ```
+
+   2. store.dispatch(action)
+
+      ```javascript
+      function changeInput(){
+          const action = {
+              type:'changeInput',
+              value:'aaa'
+          }
+          store.dispatch(action)
+      }
+      ```
+
+   3. reducers根据action做相应的逻辑
+
+      ```javascript
+      const defaultState = {}  //默认数据
+      export default (state = defaultState,action)=>{  //就是一个方法函数
+          // reducer中只能接受state,不能更改state,需要将state进行深拷贝，做相应的逻辑，然后return
+          if (action.type === 'changeInput'){
+              let newState = JSON.parse(JSON.stringify(state))
+              newState.inputvalue = action.value
+              return newState  // return之后，store中数据改变，但是视图未改变，需要重新获取store中的state
+          }
+          return state
+      }
+      ```
+
+   4. 页面订阅store
+
+      ```javascript
+      constructor(props){
+          super(props)
+           this.state = store.getState()
+           store.subscribe(this.getStore)
+        }
+        getStore = () => {
+          this.setState(store.getState())
+        }
+      ```
+
+      ```
+      实际开发中，常常把action中type属性单独放在一个文件中以常量的方式定义，然后在页面和reducer中分别引用，这样做是为了防止前后定义的type不一致，导致报错
+      实际开发中，把action存放在一个文件中，便于管理
+      ```
+#### 三个坑
+
+1. store必须是唯一的
+2. reducer中只能接受state,不能更改state
+3. reducer必须是一个纯函数
+
+​      
