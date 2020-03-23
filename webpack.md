@@ -1,3 +1,12 @@
+## 安装
+
+```javascript
+mkdir project
+cd project
+npm init
+npm install webpack webpack-cli --save-dev
+```
+
 ## 核心概念
 
 1. entry

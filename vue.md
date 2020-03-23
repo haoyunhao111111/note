@@ -1064,3 +1064,94 @@ this.$store.dispatch('increment').then(res => {
 })
 ```
 
+## vue中动画
+
+### css动画原理
+
+> vue中用<transition></transition>标签将需要进行动画的元素包裹起来，指定name属性(可不进行指定)
+>
+> transition会对包裹元素元素加载的瞬间赋予类(v-enter,v-enter-active,v-leave-to,v-leave-active)
+>
+> v-enter,v-enter-active 元素由消失到出现过程，元素加载完成进行第一帧动画时v-enter会被remove,动画完成后v-enter-active被remove
+>
+> v-leave-to,v-leave-active 元素由出现到消失过程，元素加载完成进行第一帧动画时v-leave-to会被remove,动画完成后v-leave-active被remove
+
+```vue
+html
+<transition>
+    <el-form-item label="定金金额" v-show="ruleForm.consumptionType == 2">
+        <el-input :disabled="createUserId != userId" type="number" v-model="ruleForm.earnestMoney"
+                  placeholder="请输入定金金额"></el-input>
+    </el-form-item>
+</transition>
+css
+.v-enter,.v-leave-to{
+  opacity: 0;
+}
+.v-enter-active,.v-leave-active{
+  transition:opacity 1s;
+}
+```
+
+### 在vue中使用anmiate.css动画
+
+```html
+/*
+* appear 首次进入页面 开始动画
+* appear-active-class  首次进入页面  执行的类
+* enter-active-class 开始进入时执行的类
+* leave-active-class 离开时执行的类
+* type  当animate跟transition同时存在时，以type指定的动画时长为标准时长
+* :duration='10000'  动画时长为10000毫秒
+* :duration='{entry:5000,leave:100000}'  入场动画时长  5000毫秒  出场动画时长10000毫秒
+*/
+<link href='animate.css'>
+<transition appear enter-active-class='animated swing' leave-active-class='animated swing' appear-active-class='animated swing'>
+</transition>
+```
+
+### Vue.js中js动画与Velocity.js结合
+
+```vue
+<transition @before-enter='handleBeforeEnter' @enter='handleEnter' @after-enter='afterEnter' @befoer-leave='' @leave='' @after-leave=''>
+    <div></div>
+</transition>
+<script>
+    methods:{
+        handleBeforeEnter (el) {
+            // el : transition标签所包裹的dom元素
+            console.log('handleBeforeEnter')
+        },
+        handleEnter （el,done） {
+           // done： 回调函数
+            setTimeout(()=>{
+                el.style.color = 'red'
+                done() // 回调函数执行，表明动画执行完成，然后会调用after-enter钩子函数
+            },2000)
+        }，
+        afterEnter (el) {
+            el.style.color = '#000'
+        }
+    }
+</script>
+```
+
+### 列表动画
+
+```vue
+<transiton-group>
+	<div v-for="(item,index) in arr" :key='index'>{{item}}</div>
+</transiton-group>
+<button @click='add'>添加</button>
+data () {
+    return {
+		arr: []
+    }
+}
+methods: {
+    add () {
+		this.arr.push('aa')
+    }
+}
+```
+

@@ -548,7 +548,6 @@ import reducer from './reducer'
 const store = createStore(reducer) // 创建数据存储仓库
 export default store   //暴露出去
 
-
 // reducer.js
 const defaultState = {}  //默认数据
 export default (state = defaultState,action)=>{  //就是一个方法函数
@@ -620,9 +619,9 @@ export default (state = defaultState,action)=>{  //就是一个方法函数
         }
       ```
 
-      ```
-      实际开发中，常常把action中type属性单独放在一个文件中以常量的方式定义，然后在页面和reducer中分别引用，这样做是为了防止前后定义的type不一致，导致报错
-      实际开发中，把action存放在一个文件中，便于管理
+      ```javascript
+      //实际开发中，常常把action中type属性单独放在一个文件中以常量的方式定义，然后在页面和reducer中分别引用，这样做是为了防止前后定义的type不一致，导致报错
+      //实际开发中，把action存放在一个文件中，便于管理
       ```
 #### 三个坑
 
@@ -668,4 +667,201 @@ export const getList = () => {
   }
 }
 ```
+
+#### react-redux
+
+> React生态中常用组件，它可以简化`Redux`流程 
+>
+> ```
+> npm install --save react-redux
+> ```
+
+##### Provider  
+
+> 提供器：只要使用了这个组件，组件里边的其它所有组件都可以使用`store`了 
+
+```javascript
+//         src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TodoList from './TodoList'
+//---------关键代码--------start
+import { Provider } from 'react-redux'
+import store from './store'
+//声明一个App组件，然后这个组件用Provider进行包裹。
+const App = (
+   <Provider store={store}>
+       <TodoList />
+   </Provider>
+)
+//---------关键代码--------end
+ReactDOM.render(App, document.getElementById('root'));
+```
+
+##### connect
+
+> 连接器
+
+```javascript
+import React,{Component,Fragment} from 'react'
+import Item from './item'
+import {changeInputAction,addListAction,delItemAction} from '../store/createActions'
+import {connect} from 'react-redux'  // 引入connect
+class fragement extends Component{
+  // constructor(props){
+  //   super(props)
+  // }
+  render() {
+    // const {list} = this.state;
+    return (
+      <Fragment>
+        <div>
+          <input type="text" value={this.props.inputvalue} onChange={this.props.change}/>
+          <button onClick={this.props.addList}>增加服务</button>
+        </div>
+        <div>
+          <ul>
+            {
+              this.props.list.map((item,index) => {
+                return <Item key={index+item} index={index} delFun={this.props.deleteItem} content={item}>{item}</Item>
+              })
+            }
+          </ul>
+        </div>
+      </Fragment>
+    )
+  }
+}
+
+const stateToProps = (state) => {
+  return {
+    inputvalue:state.inputvalue,
+    list:state.list
+  }
+}
+
+const dispatchToProps = (dispatch) => {
+  return {
+    change(e){
+      const action =changeInputAction(e.target.value);
+      dispatch(action)
+    },
+    addList () {
+      const action = addListAction();
+      //this.props.inputvalue
+      dispatch(action)
+    },
+    deleteItem (index){
+      const action = delItemAction(index);
+      dispatch(action)
+    }
+  }
+}
+export default connect(stateToProps,dispatchToProps)(fragement)
+
+```
+
+### react-router
+
+> ```
+> npm install --save react-router-dom
+> ```
+
+```javascript
+import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+function Index() {
+  return <h2>JSPang.com</h2>;
+}
+
+function List() {
+  return <h2>List-Page</h2>;
+}
+
+function AppRouter() {
+  return (
+    <Router>
+        <ul>
+            <li> <Link to="/">首页</Link> </li>
+            <li><Link to="/list/">列表</Link> </li>
+        </ul>
+        <Route path="/" exact component={Index} />
+        <Route path="/list/" component={List} />
+    </Router>
+  );
+}
+export default AppRouter;
+```
+
+### react-hooks
+
+```javascript
+import React,{ useState } from 'react'
+
+function Count(){
+  const [count,addCount] = useState(0)
+  return(
+    <div>
+      <div>你点击了{count}次</div>
+      <button onClick={()=>{addCount(count+1)}}>点击</button>
+    </div>
+  )
+}
+export default Count
+
+```
+
+#### useEffect
+
+```javascript
+import React,{ useState,useEffect } from 'react'
+
+function Count(){
+  const [count,addCount] = useState(0)
+  useEffect(()=>{  //  将react中的ComponentDidMount和ComponentDidUpdate结合起来，是异步操作
+    console.log(`useEffect=>${count}`)
+  })
+  return(
+    <div>
+      <div>你点击了{count}次</div>
+      <button onClick={()=>{addCount(count+1)}}>点击</button>
+    </div>
+  )
+}
+export default Count
+```
+#### useContext
+
+> 父子组件传值
+
+```javascript
+import React,{ useState,useEffect,createContext,useContext } from 'react'
+const CountContent = createContext()
+
+function CountComponent(){
+  let count = useContext(CountContent)
+  return (
+    <h2>{count}</h2>
+  )
+}
+function Count(){
+  const [count,addCount] = useState(0)
+  useEffect(()=>{
+    console.log(`useEffect=>${count}`)
+  })
+  return(
+    <div>
+      <div>你点击了{count}次</div>
+      <button onClick={()=>{addCount(count+1)}}>点击</button>
+      <CountContent.Provider value = {count}>
+        <CountComponent></CountComponent>
+      </CountContent.Provider>
+    </div>
+  )
+}
+export default Count
+```
+
+
 
