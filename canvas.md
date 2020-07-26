@@ -16,7 +16,12 @@
 2. 绘制长方形
 
    ```javascript
+   // 填充
+   ctx.fillStyle = 'rgb(200,0,0)' // 填充颜色需要在绘制之前，否则会失效
    ctx.fillRect(0,0,100,300) // (x点坐标,y点坐标,宽,高)
+   // 描边
+   ctx.s  trokeStyle = 'rgb(200,0,0)'
+   ctx.strokeRect(0,0,100,300)
    ```
 
 3. 填充和描边

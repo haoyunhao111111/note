@@ -7,7 +7,7 @@
 ```javascript
 mkdir project
 cd project
-npm init
+npm init -y
 npm install webpack webpack-cli --save-dev
 ```
 
@@ -98,16 +98,12 @@ module:{
 
 > 插件用于bundle文件的优化，资源管理和环境变量的注入，作用于整个构建过程
 
-| 名称                                                         | 描述                                  |
-| ------------------------------------------------------------ | ------------------------------------- |
-| [CommonsChunkPlugin]('https://www.webpackjs.com/plugins/commons-chunk-plugin') | 提取 chunks 之间共享的通用模块        |
-| [ExtractTextWebpackPlugin](https://www.webpackjs.com/plugins/extract-text-webpack-plugin) | 从 bundle 中提取文本（CSS）到单独的文 |
-| [`CopyWebpackPlugin`](https://www.webpackjs.com/plugins/copy-webpack-plugin) | 将单个文件或整个目录复制到构建目      |
-| [`HtmlWebpackPlugin`](https://www.webpackjs.com/plugins/html-webpack-plugin) | 简单创建 HTML 文件，用于服务器访问    |
-
-```javascript
-
-```
+| 名称                                                         | 描述                                    |
+| ------------------------------------------------------------ | --------------------------------------- |
+| [CommonsChunkPlugin]('https://www.webpackjs.com/plugins/commons-chunk-plugin') | 提取 chunks 之间共享的通用模块          |
+| [ExtractTextWebpackPlugin](https://www.webpackjs.com/plugins/extract-text-webpack-plugin) | 从 bundle 中提取文本（CSS）到单独的文件 |
+| [`CopyWebpackPlugin`](https://www.webpackjs.com/plugins/copy-webpack-plugin) | 将单个文件或整个目录复制到构建目        |
+| [`HtmlWebpackPlugin`](https://www.webpackjs.com/plugins/html-webpack-plugin) | 简单创建 HTML 文件，用于服务器访问      |
 
 ### mode
 
@@ -176,7 +172,7 @@ module:{
 
   - 解析less
 
-  > Nom i less less-loader -D
+  > npm i less less-loader -D
 
   ```javascript
   module: {
