@@ -69,7 +69,7 @@ module.exports = {
         app1:'./src/app1.js',
     },
     output:{
-        path:path.resolve(__dirname + '/dist'),  // 要求是绝对路径
+        path:path.resolve(__dirname + 'dist'),  // 要求是绝对路径
         filename:'[name].js', // [name] -> 占位符,多个入口为避免文件名重复，用占位符来保证文件名不重复
         publicPath:'./dist/'
   },

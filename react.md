@@ -36,7 +36,7 @@
   - 典型场景：资源释放
 
 - getDerivedStateFromProps：当state需要从props初始化时使用
-  - 尽量不要使用：维护两者的状态一致性会增加复杂度
+  -  尽量不要使用：维护两者的状态一致性会增加复杂度
   - 每次render都会调用
   - 新版本(16.3版本)用来取代componentWillReveiceProps
   - 典型场景：表单控件获取默认值

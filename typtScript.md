@@ -29,11 +29,13 @@ let name = '';
   - string
   - number
   - boolean
+  
 - 元组 表示长度以及个数都限制好了
   ```js
     // 可以向元祖中push数据，不可以通过索引来修改属性
     let tuble:[string,number,boolean] = ['231',12, true]
   ```
+  
 - 数组 存放一类类型的集合
   ```typescript
     let arr:number[] = [1,3,3]
@@ -149,6 +151,45 @@ let name = '';
   str1 = 1;
   str1.toFixed(2)
   ```
+  
+- 字面量类型
+
+  ```typescript
+  let direcrion: 'up'|'left'|'right'|'down'
+  direcrion = 'up'
+  ```
+
+#### 函数
+
+> 函数要考虑入参以及返回值
+
+- funtion函数关键字声明
+- const 表达式方式声明
+
+```typescript
+function sum(a:string, b:string):string {
+    return a+b
+}
+// 如果使用函数表达式，你给他定义了类型，你可以把一个可以兼容的函数赋值给他
+type Sum = (a:string, b:string) =>string
+const sum1:Sum = (a:string, b:string) => { return a + b }
+
+// 可选参数
+
+let sum2 = (a:string, b?:string) => {
+    return a
+}
+// 默认值
+let sum3 = (a:string, b:string = '2') => {
+    return a + b
+}
+
+// 剩余参数
+let sum4 = (...args:number[]) => {}
+sum4(1,2,3,4)
+```
+
+
 
 #### 类
 
@@ -181,9 +222,125 @@ console.dir(p)
 - 静态方法和静态属性
   - 通过类来调用的方法或者属性，就是静态方法或者静态属性
   - 静态方法或者静态属性可以被继承
+  
+- 属性访问器是原型属性，可以通过属性访问器来访问私有属性
 
 ```typescript
 // construtor和静态方法中的super指向的是父类,原型上的方法指向的是父类的prototype
+```
+
+```typescript
+class Animal {
+    age:number
+    constructor (public name:string, age:number) {
+        this.name = name;
+        this.age = age
+    }
+    static getName () {
+        console.log('Animal')
+    }
+    say () {
+        console.log('animal say')
+    }
+}
+
+class Cat extends Animal{
+    constructor (name:string, age:number, public address: string) {
+        super(name, age);  // 指向父类
+        this.address = address
+    }
+    static getName() {
+        super.getName()  // 指向父类
+        console.log('cat')
+    }
+  	private _eat = '';
+  	get eat () {
+      return this._eat
+    }
+  	set eat (value) {
+      this._eat = value
+    }
+    say() {
+        super.say(); // 指向父类的prototype
+        console.log('cat say')
+    }
+}
+
+Cat.getName()
+let c = new Cat('Tom', 12, 'bj');
+c.eat = 'hello'
+console.log(c.eat)
+c.say()
+```
+
+#### 装饰器
+
+> 在不改变原结构的前提下，扩展新的方法，可以对类，属性，方法进行装饰
+
+```typescript
+// 对类进行装饰
+function modifer (target:any) {
+    target.prototype.say = (
+        function () {
+            console.log('say constructor')
+        }
+    )()
+}
+
+// 对属性进行装饰
+function toUppCase(target: any, key:string) {
+    let value = target[key];
+    Object.defineProperty(target, key, {
+        get () {
+            return value.toUpperCase()
+        },
+        set (newValue) {
+            value = newValue
+        }
+    })
+}
+// 支持扩展参数
+ function double(num:number) {
+    return function (target:any, key:string) {
+        let value = target[key]
+        Object.defineProperty(target, key, {
+            get () {
+                return value * num
+            },
+            set (newValue) {
+                value = newValue
+            }
+        })
+    }
+ }
+// 对方法进行装饰
+ function beforeGetName(target:any, key: string, descriper:PropertyDescriptor){
+     let value = descriper.value
+     descriper.value = function () {
+         console.log('before getName')
+         value.call(target)
+     }
+     return descriper
+ }
+
+@modifer
+class Person{
+    say!:Function;
+    @toUppCase
+    name:string = 'hyh';
+    @double(3)
+    age:number = 12
+    @beforeGetName
+    getName () {
+        console.log('getname')
+    }
+}
+
+let p = new Person()
+console.log(p.name)
+console.log(p.age)
+p.getName()
+export {}
 ```
 
 
