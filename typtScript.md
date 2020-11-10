@@ -1,5 +1,5 @@
-### typescript
-- Typescript是由微软开发的一款开源的编程语言
+### Typescript
+- Typescript是由微T软开发的一款开源的编程语言
 - Typescript是Javascript的超集，遵循最新的ES5/ES6规范。TypeScript扩展了Javascript语法
 - TypeScript更像后端Java、C#这样的面向对象语言可以让JS开发大型企业应用
 - 越来越多的项目是基于TS的，比如VSCode、Angular6、Vue3、React16
@@ -189,13 +189,11 @@ let sum4 = (...args:number[]) => {}
 sum4(1,2,3,4)
 ```
 
-
-
 #### 类
 
 - 三个运算符
-  - as 断言成 xxx
-  - ! 非空断言
+  - as   断言成 xxx
+  - !    非空断言
   - ？ 链运算判断符，有值取值，没有返回undefined
 
 ```typescript
@@ -273,6 +271,25 @@ console.log(c.eat)
 c.say()
 ```
 
+##### 抽象类
+
+> 抽象类不能被实例化,只有抽象类里面的内容，可以标记`abstract`，子类必须实现
+
+```typescript
+abstract class Animal { // 抽象类可以包含抽象方法和抽象属性
+  abstract name:string //可以没有实现
+  eat() {
+    console.log('eat')
+  }
+}
+
+class Cat extends Animal{
+  name!: string;
+}
+```
+
+
+
 #### 装饰器
 
 > 在不改变原结构的前提下，扩展新的方法，可以对类，属性，方法进行装饰
@@ -343,5 +360,128 @@ p.getName()
 export {}
 ```
 
+#### 接口
 
+> TypeScript的核心原则之一是对值所具有的*结构*进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在TypeScript里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。
 
+> 接口可以用来描述属性，方法，类，可以被实现，被继承
+
+- 描述属性
+
+```typescript
+interface Fullname {
+    firstname:string, 
+    lastname:string
+}
+// 利用接口来描述属性，别人看到依赖接口，可以规范自己的传参
+function fullname (obj:Fullname) {
+    return obj.firstname + obj.lastname
+}
+fullname({firstname:'string', lastname:'string'})
+```
+
+- 描述方法
+
+```typescript
+interface FullName {
+    (firstName:string,lastName:string):string
+}
+const fullName:FullName = (firstName:string, lastName:string):string => {
+    return firstName + lastName
+}
+```
+
+##### 混合类型
+
+> 一个对象可以同时做为函数和对象使用，并带有额外的属性。
+
+```typescript
+interface Counter {
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+
+function getCounter(): Counter {
+    let counter = <Counter>function (start: number) { };
+    counter.interval = 123;
+    counter.reset = function () { };
+    return counter;
+}
+
+let c = getCounter();
+c(10);
+c.reset();
+c.interval = 5.0;
+```
+
+##### 特性
+
+> 被描述的属性，方法，类中的参数不能比接口定义的多
+>
+> 解决办法有四种
+
+- 采用断言，直接断言成对应的接口
+
+  ```typescript
+  interface Potato {
+      color:string,
+      size: number
+  }
+  const potato:Potato = ({
+      color: '',
+      size: 10,
+      address: 'bj'
+  } as Potato)
+  ```
+
+- 多个重名的接口会合并，但是这样会破坏原有的接口
+
+  ```typescript
+  interface Potato {
+      color:string,
+      size: number
+  }
+  interface Potato {
+      address:string
+  }
+  const potato:Potato = {
+      color: '',
+      size: 10,
+      address: 'bj'
+  }
+  ```
+
+- 在原接口上扩展新的接口
+
+  ```typescript
+  interface Potato {
+      color:string,
+      size: number
+  }
+  interface EPotato extends Potato{
+      address:string
+  }
+  const potato:EPotato = {
+      color: '',
+      size: 10,
+      address: 'bj'
+  }
+  ```
+
+- 为接口添加自定义的属性
+
+  ```typescript
+  interface Potato {
+      color:string,
+      size: number,
+      [key:string]: any
+  }
+  const potato:Potato = {
+      color: '',
+      size: 10,
+      address: 'bj'
+  }
+  ```
+
+  
