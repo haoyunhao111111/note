@@ -352,8 +352,6 @@ fn()(20) //21
 >
 > fn()(10) 先执行fn(),把fn的返回值进行二次执行
 
-![](https://image.coolcustomer.cn/19c9ff5c-10f5-4399-b1bb-92a3007f8b12)
-
 ### this
 
 > 当前函数执行的主体(谁执行的函数，this指向谁)
@@ -509,9 +507,6 @@ console.log(num,obj.num)
    >
    > 5. console.log(6,6)
 
-   
-
-   ![](https://image.coolcustomer.cn/cb3a9b24-d357-4273-a71c-25ac4a02ac47 )
 
 ## 面向对象
 

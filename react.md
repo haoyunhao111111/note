@@ -9,34 +9,35 @@
 
 ![16.0之前的生命周期](https://img2018.cnblogs.com/blog/331769/201903/331769-20190314070341633-1595341780.png )
 
-![最新版的生命周期](https://qiniu-admin.51beauty.com.cn/1593326209243895)
+![最新版的生命周期](https://s0.lgstatic.com/i/image/M00/5D/D9/CgqCHl-FVVeAaMJvAAKXOyLlUwM592.png)
 
+- constructor:仅仅在挂载阶段被调用一次
+  - 可以进行this.state的初始化
 - componentWillMount: 在组件渲染之前执行(新版本弃用)
-
+- render
+  - render的执行过程并不会去操作真实的dom,只是把需要渲染的内容返出来
+  - 渲染真实dom是在挂载阶段由eactDOM.render()完成
 - componentDidMount: 在组件渲染之后执行
   - ui渲染完成后调用
   - 只执行一次
   - 典型场景：获取外部资源
-
+- componentWillReveiceProps: props发生改变执行(新版本弃用)
+  - 并不是由 props 的变化触发的，而是由父组件的更新触发的
 - shouldComponentUpdate: 返回true或false,true代表允许改变，false代表不允许改变
   - 决定VIrtual DOM是否要重绘
   - 一般可以由pureComponent自动实现
   - 典型场景：性能优化
-
 - componentWillUpdate: 数据在改变之前执行(state, props)(新版本弃用)
-
 - componentDidUpdate: 数据修改完成(state, props)
   - 每次ui更新时被调用
-  - 典型场景：页面根据props变化重新获取数据
-
-- componentWillReveiceProps: props发生改变执行(新版本弃用)
-
+  - 常常用做子组件更新完毕来通知父组件
+- 典型场景：页面根据props变化重新获取数据
 - componentWillUnmount: 组件卸载前执行
   - 组件移除时调用
   - 典型场景：资源释放
-
 - getDerivedStateFromProps：当state需要从props初始化时使用
-  -  尽量不要使用：维护两者的状态一致性会增加复杂度
+  - 是一个静态方法，获取不到this
+  - 尽量不要使用：维护两者的状态一致性会增加复杂度
   - 每次render都会调用
   - 新版本(16.3版本)用来取代componentWillReveiceProps
   - 典型场景：表单控件获取默认值
