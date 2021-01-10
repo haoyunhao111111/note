@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		#canvas1,#canvas2,#canvas3,#canvas4,#canvas5,#canvas6,#canvas7,#canvas8,#canvas9{
+			border: 1px solid #aaa;
+			display: block;
+			margin: 50px auto;
+		}
+	</style>
+	<body>
+		<div id="">
+			直线
+		</div>
+		<canvas id="canvas1" width="" height=""></canvas>
+		<div id="">
+			beginPath
+		</div>
+		<canvas id="canvas2" width="400" height="400"></canvas>
+		<div id="">
+			多边形-填充
+		</div>
+		<canvas id="canvas3" width="400" height="400"></canvas>
+		
+		<div id="">
+			矩形
+		</div>
+		<canvas id="canvas4" width="400" height="400"></canvas>
+		
+		<div id="">
+			圆弧
+		</div>
+		<canvas id="canvas5" width="400" height="400"></canvas>
+		
+		<div id="">
+			圆角矩形
+		</div>
+		<canvas id="canvas6" width="400" height="400"></canvas>
+		
+		<div id="">
+			文字
+		</div>
+		<canvas id="canvas7" width="400" height="400"></canvas>
+		
+		<div id="">
+			clip
+		</div>
+		<canvas id="canvas8" width="400" height="400"></canvas>
+		
+		<div id="">
+			阴影
+		</div>
+		<canvas id="canvas9" width="400" height="400"></canvas>
+	</body>
+</html>
+
+
+<script type="text/javascript">
+	function drawReact( ctx, x, y, width, height, borderWidth, borderColor, fillColor ) {
+		ctx.beginPath();
+		ctx.moveTo(x ,y);
+		ctx.lineTo(x + width, y);
+		ctx.lineTo(x + width, y + height);
+		ctx.lineTo(x, y + height);
+		ctx.closePath();
+		
+		ctx.lineWidth = borderWidth;
+		ctx.fillStyle = fillColor;
+		ctx.strokeStyle = borderColor;
+		ctx.fill();
+		ctx.stroke();
+	}
+
+	function drawReact1( ctx, x, y, width, height, borderWidth, borderColor, fillColor ) {
+		ctx.beginPath();
+		ctx.rect( x, y, width, height );
+		ctx.closePath();
+		ctx.lineWidth = borderWidth;
+		ctx.fillStyle = fillColor;
+		ctx.strokeStyle = borderColor;
+		ctx.fill();
+		ctx.stroke();
+	}
+	
+	function drawReact2( ctx, x, y, width, height, borderWidth, borderColor, fillColor ) {
+		ctx.lineWidth = borderWidth;
+		ctx.fillStyle = fillColor;
+		ctx.strokeStyle = borderColor;
+		ctx.fillRect( x, y, width, height );
+		ctx.strokeRect( x, y, width, height );
+	}
+//	绘制五角星
+	function drawStar(ctx,r, R, x, y) {
+		console.log(r)
+		ctx.beginPath();
+		for(var i = 0; i < 5; i++) {
+			ctx.lineTo(Math.cos( (18 + i*72)/180 * Math.PI ) * R + x,
+						-Math.sin( (18 + i*72)/180 * Math.PI ) * R + y);
+			ctx.lineTo(Math.cos( (54 + i*72)/180 * Math.PI ) * r + x,
+						-Math.sin( (54 + i*72)/180 * Math.PI ) * r + y)
+		}
+		ctx.closePath();
+		ctx.lineWidth = 2;
+		ctx.stroke
+	}
+	
+//	绘制圆角矩形
+	function drawRoundRect(ctx6,x, y, w, h, r, strokeColor, lineW) {
+		var canvas6 = document.getElementById('canvas6');
+		var ctx6 = canvas6.getContext('2d');
+
+		ctx6.strokeStyle = strokeColor;
+		ctx6.lineWidth = lineW;
+		ctx6.save();
+		ctx6.translate( x, y);
+		ctx6.beginPath();
+		w = w,h = h,r = r;
+		ctx6.arc(w-r ,h-r, r, 0, Math.PI/2);
+		ctx6.lineTo(r,h);
+		ctx6.arc(r ,h -r, r, Math.PI/2, Math.PI);
+		ctx6.lineTo(0,r);
+		ctx6.arc(r ,r, r, Math.PI, Math.PI/2*3);
+		ctx6.lineTo(w-r,0);
+		ctx6.arc(w-r ,r, r, Math.PI/2*3, Math.PI*2);
+		ctx6.closePath();
+		ctx6.stroke();
+	}
+	
+//	直线
+	var canvas1 = document.getElementById('canvas1');
+	canvas1.width = 400;
+	canvas1.height = 400;
+	var ctx1 = canvas1.getContext('2d');
+	ctx1.moveTo(100,100);
+	ctx1.lineTo(300,300);
+	ctx1.lineWidth = 10;
+	ctx1.strokeStyle = '#058';
+	ctx1.stroke();  
+	
+//	==========================================
+//线条beginPath
+	var canvas2 = document.getElementById('canvas2');
+	var ctx2 = canvas2.getContext('2d');
+	ctx2.lineWidth = 10;
+	
+	ctx2.beginPath();
+//	ctx2.moveTo(20,50);
+	ctx2.lineTo(50,100);
+	ctx2.lineTo(130,200);
+	ctx2.lineTo(50,300);
+	ctx2.strokeStyle = 'red';
+	ctx2.stroke();
+	
+	ctx2.beginPath();
+//	ctx2.moveTo(120,50);
+	ctx2.lineTo(150,100);
+	ctx2.lineTo(230,200);
+	ctx2.lineTo(150,300);
+	ctx2.strokeStyle = 'green';
+	ctx2.stroke();
+	
+	ctx2.beginPath();
+//	ctx2.moveTo(220,50);
+	ctx2.lineTo(270,100);
+	ctx2.lineTo(330,200);
+	ctx2.lineTo(250,300);
+	ctx2.strokeStyle = 'blue';
+	ctx2.stroke();
+	
+//	==========================================
+//多边形-填充
+	var canvas3 = document.getElementById('canvas3');
+	var ctx3 = canvas3.getContext('2d');
+	drawReact(ctx3, 50, 100, 300, 200, 10, '#ccc', 'blue');
+	
+//	==========================================
+//矩形
+	var canvas4 = document.getElementById('canvas4');
+	var ctx4 = canvas4.getContext('2d');
+	drawReact1(ctx4, 50, 100, 300, 200, 10, '#ccc', 'green');
+	
+//	==========================================
+//
+	var canvas5 = document.getElementById('canvas5');
+	var ctx5 = canvas5.getContext('2d');
+	ctx5.beginPath();
+	ctx5.arc(50,50,300,0,Math.PI/2);
+	ctx5.stroke();
+	
+	ctx5.beginPath();
+	ctx5.moveTo(0,200);
+	ctx5.arcTo(0,0,200,0,50);
+//	ctx5.lineWidth = 6;
+	ctx5.strokeStyle = 'red';
+	ctx5.stroke();
+//	圆角矩形
+	var canvas6 = document.getElementById('canvas6');
+	var ctx6 = canvas6.getContext('2d');
+	drawRoundRect(ctx6,50, 50, 300, 300, 10, 'green', 2);
+	
+//	文字
+	var canvas7 = document.getElementById('canvas7');
+	var ctx7 = canvas7.getContext('2d');
+	ctx7.font = "bold 24px Arial";
+	ctx7.fillStyle = "red";
+	ctx7.fillText('Canvas',100,100);
+	
+	ctx7.textAlign = "left";
+	ctx7.fillText('left', 200,180);
+	ctx7.textAlign = "right";
+	ctx7.fillText('right', 200,260);
+	ctx7.textAlign = "center";
+	ctx7.fillText('center', 200,340);
+	
+	ctx7.strokeStyle = "blue";
+	ctx7.moveTo(200,0);ctx7.lineTo(200,400);
+	ctx7.stroke();
+	
+	var textW = ctx7.measureText('canvas').width;
+	console.log(textW)
+	
+//	clip
+	var canvas8 = document.getElementById('canvas8');
+	var ctx8 = canvas8.getContext('2d');
+	ctx8.beginPath();
+	ctx8.arc(200,200,100,0,Math.PI*2);
+	ctx8.fillStyle = "yellow";
+	ctx8.fill();
+	ctx8.clip();
+	ctx8.font = "normal 30px Arial";
+	ctx8.textAlign = "center";
+	ctx8.textBaseline = "millle";
+	ctx8.fillStyle = "red";
+	ctx8.fillText("CanvasCanvasCanvasCanvasCanvas", canvas8.width / 2, canvas8.height / 2);
+
+//	阴影
+	var canvas9 = document.getElementById('canvas9');
+	var ctx9 = canvas9.getContext('2d');
+	ctx9.fillStyle  ='red';
+	ctx9.shadowColor = "gray";
+	ctx9.shadowOffsetX = -2;
+	ctx9.shadowOffsetY = 2;
+	ctx9.shadowBlur = 50;
+	ctx9.fillRect(50, 50, 300, 300);
+</script>
