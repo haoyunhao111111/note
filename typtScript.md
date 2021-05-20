@@ -13,7 +13,7 @@
 3. tsc  将ts文件转化为js
 4. npm i ts-node -g  // 通过vscode右键run code执行
 
-// 通过构建工具来执行
+// 通过构建工具来执行  --rollup
 npm i rollup typescript rollup-plugin-typescript2 @rollup/plugin-node-resolve rollup-plugin-serve -D
 ```
 
@@ -397,7 +397,7 @@ const fullName:FullName = (firstName:string, lastName:string):string => {
 
 ```typescript
 interface Counter {
-    (start: number): string;
+    (start: number): string; // ()代表函数
     interval: number;
     reset(): void;
 }
@@ -424,6 +424,7 @@ c.interval = 5.0;
 - 采用断言，直接断言成对应的接口
 
   ```typescript
+  // 实现要比接口定义的属性多，不能少
   interface Potato {
       color:string,
       size: number
@@ -485,3 +486,26 @@ c.interval = 5.0;
   ```
 
   
+
+##### 被类实现
+
+```js
+interface ISpeck {
+    name: string,
+    speck(): void // 对类来说，标明返回值是void，表示不关心返回值，并不是要求返回空
+}
+class Speck implements ISpeck {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+    speck():string {
+        return 'xx'
+    }
+}
+
+let s = new Speck('aaa')
+```
+
+
+
