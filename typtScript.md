@@ -32,8 +32,9 @@ let name = '';
   
 - 元组 表示长度以及个数都限制好了
   ```js
-    // 可以向元祖中push数据，不可以通过索引来修改属性
-    let tuble:[string,number,boolean] = ['231',12, true]
+  // 可以向元祖中push数据，不可以通过索引来修改属性
+  let tuple:[string,number,boolean] = ['231',12, true]
+  tuple.push(12)
   ```
   
 - 数组 存放一类类型的集合
