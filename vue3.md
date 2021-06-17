@@ -2,8 +2,25 @@
 
 #### setup
 
-- 新的option,所有的组合api函数都在此使用，只在初识化的时候调用一次
+- 新的option,所有的组合api函数都在此使用，只在初始化的时候调用一次
 - 函数如果返回一个对象，那么对象中的属性以及函数，模板中可以直接使用
+- setup的执行时机
+  - 在beforecreate之前执行，此时组件对象还没有创建
+  - this是undefined，不能通过this来访问data/method/watch/coomputed
+  - 其实所有的composition API相关回调函数也都有不可以取到this
+- setup返回值
+  - 一般返回一个对象，为模版提供数据，
+  - 返回对象的属性会与data函数返回数据合并成为组件对象的属性
+  - 返回对象中的方法会与method中的方法合并成为组件对象的方法
+  - 如果有重名，setup优先
+  - 一般setup/data以及setup/method不要混用
+  - setup不能是一个async函数
+- setup的参数
+  - props: 包含props配置声明且传入了的所有的属性和对象
+  - context:
+    - attrs: 包含没有在props中声明的属性的对象，相当于this.$attrs
+    - slots:包含所有传入的插槽内容的对象，相当于this.$slots
+    - emit: 用来分发自定义事件的函数，相当于this.$emit
 
 #### ref
 
@@ -87,3 +104,18 @@ export default defineComponent({
 
 #### 响应式原理
 
+##### vue2
+
+- 基本类型以及对象类型，通过Object.defineProperty来劫持，为每一个属性添加getter/setter来实现响应式
+- 对于数据，通过改写push,pop,shift,unshift,reserve,splice,sort这七个方法来实现对数据的监听
+
+- 缺点
+  - 对象直接添加或者删除属性，页面不是更新
+  - 对于数组来说，直接通过下标替换或更新length，页面不会更新
+
+##### vue3
+
+- 通过Proxy拦截对data任意属性的任意操作(属性值的读写，添加，删除)
+- 通过Reflect动态对被代理的相应属性就行特定的操作
+- Proxy的监听的深层次的
+- ie不兼容Proxy,所以vue3放弃了支持ie
