@@ -141,3 +141,30 @@ export default defineComponent({
 |  | renderTracked | onRenderTracked | 跟踪虚拟dom重新渲染时调用 |
 |  | renderTriggered | onRenderTriggered | 虚拟dom重新渲染被触发时调用 |
 
+`3.0的生命周期会比2.O的先执行，vue3的生命周期是一个函数，参数是一个回调函数`
+
+#### toRefs
+
+> 可以把一个响应式的对象，转换成普通对象，改普通对象的每一个属性都是一个ref
+
+- 当从合成函数返回响应式数据时，toRefs非常有用，这样消费组件就可以在不丢失响应式的情况下对返回的对象进行分解使用
+
+#### 其他的api
+
+##### shallowReactive && shallowRef
+
+shallowReactive：这两个都是浅的响应式，只会对对象本身进行响应，不会进行的深度的响应
+
+shallowRef:如果是对一个对象进行响应式，不会进行reactive处理
+
+##### readonly && shallowReadonly
+
+readonly：深度只读数据
+
+shallowReadonly： 浅的只读数据
+
+##### toRaw && markRaw
+
+toRaw: 返回由reactive | ref 方法转换的响应式代理的普通对象
+
+markRaw： 标记一个对象，使其永远不能被转换成代理对象，返回对象本身
