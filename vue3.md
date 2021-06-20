@@ -33,6 +33,9 @@
   - 模板中不需要.value
 
 - 一般用来定义一个基本数据类型的响应式数据
+- 如果用ref处理对象或者数组，内部会自动的将对象/数组转换为reactive的代理对象
+- ref内部是通过给value属性添加getter/setter来实现对数据的劫持
+- reactive内部是通过使用proxy来实现对对象内部所有数据的劫持，并通过reflect操作对象内部数据
 
 ```js
 <template>
@@ -116,6 +119,25 @@ export default defineComponent({
 ##### vue3
 
 - 通过Proxy拦截对data任意属性的任意操作(属性值的读写，添加，删除)
-- 通过Reflect动态对被代理的相应属性就行特定的操作
+- 通过Reflect动态对被代理的相应属性进行特定的操作
 - Proxy的监听的深层次的
 - ie不兼容Proxy,所以vue3放弃了支持ie
+
+#### 生命周期
+
+| vue2          | vue3          | Components api | 说明 |
+| ------------- | ------------- | -------------- | ------------- |
+| beforeCreate  | beforeCreate  | setup          |  |
+| created       | created       | setup          |  |
+| beforeMount   | beforeMount   | onBeforeMount  |  |
+| mounted       | mounted       | onMounted      |  |
+| beforeUpdate  | beforeUpdate  | onBeforeUpdate |  |
+| updated       | updated       | onUpdated      |  |
+| activated     | activated     | onActivated |  |
+|  deactivated            |deactivated|onDeactivated|  |
+| beforeDestroy | beforeUnmount | onBeforeMounted |  |
+| destroyed     | unMounted     | onUnmounted |  |
+| errorCaptured | errorCaptured | onErrorCaptured | 子孙组件错误时被调用(错误对象，错误组件，错误字符串) |
+|  | renderTracked | onRenderTracked | 跟踪虚拟dom重新渲染时调用 |
+|  | renderTriggered | onRenderTriggered | 虚拟dom重新渲染被触发时调用 |
+
